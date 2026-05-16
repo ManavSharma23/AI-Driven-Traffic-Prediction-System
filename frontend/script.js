@@ -8,41 +8,53 @@ document.addEventListener('DOMContentLoaded', () => {
     initMap();
     initTheme();
     initWeatherChips();
-    initAnimations();
-    detectLocation();
+    initHeroStats();
+    initHeatmap();
+    showSection('hero'); // Start at Home
 });
 
-function initMap() {
-    // Centered on I-94 Minneapolis/St. Paul area
-    map = L.map('map-container').setView([44.9778, -93.2650], 12);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap &copy; CARTO'
-    }).addTo(map);
+// --- SPA Navigation ---
+function showSection(id) {
+    const sections = document.querySelectorAll('.spa-section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    // Update Nav
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.id === `nav-${id}`) link.classList.add('active');
+    });
 
-    // Mock Congestion Zones (Polylines)
-    const routes = [
-        [[44.95, -93.35], [44.98, -93.15], '#ef4444'], // Heavy
-        [[45.05, -93.20], [44.90, -93.20], '#fbbf24'], // Moderate
-        [[44.97, -93.50], [44.97, -93.10], '#34d399']  // Light
+    // Animate Section Switch
+    sections.forEach(section => {
+        if (section.id === id) {
+            section.classList.add('active');
+            // Re-trigger map resize if map section shown
+            if (id === 'live-map' && map) setTimeout(() => map.invalidateSize(), 300);
+        } else {
+            section.classList.remove('active');
+        }
+    });
+}
+
+function initMap() {
+    map = L.map('map-container').setView([44.9778, -93.2650], 12);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+
+    const highwayStyles = [
+        { name: "I-94 West", coords: [[44.95, -93.35], [44.98, -93.15]], color: '#ef4444', vol: '5,240' },
+        { name: "I-35E South", coords: [[45.05, -93.20], [44.90, -93.20]], color: '#fbbf24', vol: '3,120' },
+        { name: "I-394 Hub", coords: [[44.97, -93.50], [44.97, -93.10]], color: '#34d399', vol: '1,850' }
     ];
 
-    routes.forEach(route => {
-        L.polyline(route.slice(0, 2), {color: route[2], weight: 8, opacity: 0.6}).addTo(map);
+    highwayStyles.forEach(h => {
+        const poly = L.polyline(h.coords, {color: h.color, weight: 8, opacity: 0.6}).addTo(map);
+        poly.bindPopup(`<strong>${h.name}</strong><br>Live Volume: ${h.vol} vph<br><span style="color:${h.color}">Status: ${h.vol > 4000 ? 'Heavy' : 'Stable'}</span>`);
     });
 }
 
 function initTheme() {
-    const toggle = document.getElementById('theme-toggle');
-    toggle.addEventListener('click', () => {
+    document.getElementById('theme-toggle').addEventListener('click', () => {
         document.body.classList.toggle('light-theme');
-        const isDark = !document.body.classList.contains('light-theme');
-        toggle.innerHTML = isDark ? '<i data-lucide="moon"></i>' : '<i data-lucide="sun"></i>';
-        lucide.createIcons();
-        
-        // Update Map tiles if needed
-        const layer = isDark ? 'dark_all' : 'rastertiles/voyager';
-        map.eachLayer(l => { if (l._url) map.removeLayer(l); });
-        L.tileLayer(`https://{s}.basemaps.cartocdn.com/${layer}/{z}/{x}/{y}{r}.png`).addTo(map);
     });
 }
 
@@ -55,44 +67,31 @@ function initWeatherChips() {
     });
 }
 
-function initAnimations() {
-    anime({
-        targets: '#total-predictions',
-        innerHTML: [0, 1245000],
-        round: 1,
-        easing: 'easeOutExpo',
-        duration: 3000
-    });
+function initHeroStats() {
+    anime({ targets: '#stat-predictions', innerHTML: [0, 1245000], round: 1, duration: 2500, easing: 'easeOutExpo' });
+    anime({ targets: '#stat-accuracy', innerHTML: [0, 98.4], round: 10, duration: 2500, easing: 'easeOutExpo', suffix: '%' });
+    anime({ targets: '#stat-cities', innerHTML: [0, 12], round: 1, duration: 2000, easing: 'easeOutExpo' });
 }
 
-function detectLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-            document.getElementById('current-location').textContent = "Minneapolis, MN (Detected)";
-        }, () => {
-            document.getElementById('current-location').textContent = "Minneapolis (Default)";
-        });
+function initHeatmap() {
+    const container = document.getElementById('heatmap-calendar');
+    for (let i = 0; i < 24 * 7; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'heat-cell';
+        const opacity = Math.random();
+        cell.style.background = `rgba(99, 102, 241, ${opacity})`;
+        container.appendChild(cell);
     }
 }
 
-// --- Main Prediction Logic ---
+// --- Logic ---
 document.getElementById('prediction-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const submitBtn = document.getElementById('submit-btn');
-    const loader = document.getElementById('loader');
-    
-    loader.style.display = 'block';
-    submitBtn.disabled = true;
-
     const weather = document.querySelector('.weather-chip.active').dataset.value;
     const formData = {
         date_time: document.getElementById('date_time').value.replace('T', ' ') + ':00',
         temp: parseFloat(document.getElementById('temp').value),
-        rain_1h: 0,
-        snow_1h: 0,
-        clouds_all: 40,
-        weather_main: weather
+        rain_1h: 0, snow_1h: 0, clouds_all: 40, weather_main: weather
     };
 
     try {
@@ -111,77 +110,77 @@ document.getElementById('prediction-form').addEventListener('submit', async (e) 
         const foreData = await foreRes.json();
         currentForecast = foreData.forecast;
 
-        updateDisplay(predData);
-        updateChart(foreData.forecast);
-
-    } catch (error) {
-        alert('API Error: ' + error.message);
-    } finally {
-        loader.style.display = 'none';
-        submitBtn.disabled = false;
-    }
+        updateInfinityDisplay(predData);
+        updateInfinityChart(foreData.forecast);
+    } catch (e) { alert('Simulation failed: ' + e.message); }
 });
-
-function updateDisplay(data) {
-    const volume = data.prediction;
-    
-    // Animated Number Counter
-    anime({
-        targets: '#prediction-number',
-        innerHTML: [0, volume],
-        round: 1,
-        easing: 'easeOutExpo',
-        duration: 1500
-    });
-
-    const percentage = Math.min(Math.round((volume / 6500) * 100), 100);
-    document.getElementById('meter-percentage').textContent = `${percentage}%`;
-    
-    const meterFill = document.getElementById('meter-fill');
-    const dashOffset = 126 - (126 * percentage) / 100;
-    meterFill.style.strokeDashoffset = dashOffset;
-    
-    const color = percentage < 30 ? '#10b981' : percentage < 70 ? '#f59e0b' : '#ef4444';
-    meterFill.style.stroke = color;
-
-    const statusBadge = document.getElementById('traffic-status');
-    statusBadge.textContent = percentage < 30 ? 'Smooth' : percentage < 70 ? 'Moderate' : 'Congested';
-    statusBadge.style.color = color;
-
-    document.getElementById('insight-reason').textContent = data.insights.reason;
-    document.getElementById('insight-advice').textContent = data.insights.recommendation;
-    document.getElementById('confidence-range').textContent = `${data.range.min} - ${data.range.max} vph`;
-}
 
 // --- Time Scrubber Logic ---
 document.getElementById('time-scrubber').addEventListener('input', (e) => {
-    if (currentForecast.length === 0) return;
-    const hourIdx = e.target.value;
+    if (!currentForecast || currentForecast.length === 0) return;
+    const hourIdx = parseInt(e.target.value);
     const data = currentForecast[hourIdx];
     
-    // Quick update of display for scrubbed hour
-    document.getElementById('prediction-number').textContent = data.volume.toLocaleString();
-    const percentage = Math.min(Math.round((data.volume / 6500) * 100), 100);
-    document.getElementById('meter-percentage').textContent = `${percentage}%`;
-    document.getElementById('meter-fill').style.strokeDashoffset = 126 - (126 * percentage) / 100;
+    // 1. Update the Big Display
+    updateInfinityDisplay({
+        prediction: data.volume,
+        range: { min: Math.round(data.volume * 0.92), max: Math.round(data.volume * 1.08) },
+        insights: {
+            reason: `Predicted volume for ${data.hour}:00`,
+            recommendation: data.volume < 2000 ? "Excellent" : data.volume < 4500 ? "Good" : "Busy"
+        }
+    });
+
+    // 2. Highlight point on chart
+    if (forecastChart) {
+        forecastChart.setActiveElements([{
+            datasetIndex: 0,
+            index: hourIdx
+        }]);
+        forecastChart.update();
+    }
 });
 
-function updateChart(forecastData) {
+function updateInfinityDisplay(data) {
+    const vol = data.prediction;
+    anime({ targets: '#prediction-number', innerHTML: [0, vol], round: 1, duration: 1500, easing: 'easeOutExpo' });
+    
+    const percentage = Math.min(Math.round((vol / 6500) * 100), 100);
+    document.getElementById('meter-percentage').textContent = `${percentage}%`;
+    document.getElementById('meter-fill').style.strokeDashoffset = 126 - (126 * percentage) / 100;
+    
+    const color = percentage < 30 ? '#10b981' : percentage < 70 ? '#f59e0b' : '#ef4444';
+    document.getElementById('meter-fill').style.stroke = color;
+    document.getElementById('traffic-status').textContent = percentage < 30 ? 'Stable' : 'Congested';
+    document.getElementById('traffic-status').style.color = color;
+    
+    document.getElementById('insight-reason').textContent = data.insights.reason;
+    document.getElementById('insight-advice').textContent = data.insights.recommendation;
+    document.getElementById('confidence-range').textContent = `${data.range.min} - ${data.range.max} vph`;
+    
+    const avgText = percentage > 50 ? 'Above Average' : 'Below Average';
+    document.getElementById('prediction-context').textContent = `${percentage}% Load &bull; ${avgText}`;
+}
+
+function updateInfinityChart(forecast) {
     const ctx = document.getElementById('forecastChart').getContext('2d');
     if (forecastChart) forecastChart.destroy();
+    
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(99, 102, 241, 0.4)');
+    gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
 
     forecastChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: forecastData.map(d => `${d.hour}:00`),
+            labels: forecast.map(f => `${f.hour}:00`),
             datasets: [{
-                data: forecastData.map(d => d.volume),
+                data: forecast.map(f => f.volume),
                 borderColor: '#6366f1',
-                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                backgroundColor: gradient,
                 fill: true,
                 tension: 0.4,
                 pointRadius: 4,
-                pointHoverRadius: 8,
                 pointBackgroundColor: '#6366f1'
             }]
         },
@@ -195,4 +194,14 @@ function updateChart(forecastData) {
             }
         }
     });
+}
+
+function exportCSV() {
+    if (currentForecast.length === 0) return alert('No data to export.');
+    let csv = 'Hour,Volume\n';
+    currentForecast.forEach(f => csv += `${f.hour}:00,${f.volume}\n`);
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'traffic_forecast.csv'; a.click();
 }

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrafficFlow Enterprise | AI Highway Analytics</title>
+    <title>TrafficFlow Infinity | AI Infrastructure</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Essential Libraries -->
+    <!-- Infrastructure Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
@@ -13,79 +13,113 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="dark-theme">
-    <!-- Fixed Top Navigation -->
+    <!-- Animated Global Background -->
+    <div class="global-bg">
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Frosted Glass Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-logo">
+            <div class="nav-logo" onclick="showSection('hero')">
                 <i data-lucide="zap" class="logo-icon"></i>
-                <span>TrafficFlow <span class="badge-pro">ENTERPRISE</span></span>
+                <span>TrafficFlow <span class="badge-pro">INFINITY</span></span>
             </div>
             <div class="nav-links">
-                <a href="#hero" class="active">Overview</a>
-                <a href="#live-map">Live Map</a>
-                <a href="#forecast">Analytics</a>
-                <a href="#planner">Route Planner</a>
+                <a href="javascript:void(0)" onclick="showSection('hero')" id="nav-hero" class="active">Home</a>
+                <a href="javascript:void(0)" onclick="showSection('live-map')" id="nav-live-map">Network Map</a>
+                <a href="javascript:void(0)" onclick="showSection('forecast')" id="nav-forecast">Neural Predictor</a>
+                <a href="javascript:void(0)" onclick="showSection('analytics')" id="nav-analytics">Analytics</a>
+                <a href="javascript:void(0)" onclick="showSection('planner')" id="nav-planner">Route Planner</a>
                 <button id="theme-toggle" class="theme-btn"><i data-lucide="moon"></i></button>
             </div>
         </div>
     </nav>
 
     <main class="page-content">
-        <!-- Hero Section -->
-        <section id="hero" class="hero-section">
-            <div class="hero-content">
-                <h1 class="hero-title">Predict the Road.<br>Avoid the Flow.</h1>
-                <p class="hero-subtitle">High-precision neural networks processing millions of data points to give you real-time highway insights.</p>
-                <div class="hero-actions">
-                    <a href="#forecast" class="cta-primary">Get Started</a>
-                    <a href="#live-map" class="cta-secondary">View Live Map</a>
+        <!-- 1. Hero / Landing Section -->
+        <section id="hero" class="spa-section active">
+            <div class="hero-container">
+                <div class="hero-main">
+                    <h1 class="hero-title">Predict the Pulse<br>of the City.</h1>
+                    <p class="hero-subtitle">The world's most advanced highway volume prediction engine. Powered by deep neural networks.</p>
+                    <div class="hero-actions">
+                        <button onclick="showSection('forecast')" class="cta-primary">Get Started</button>
+                        <button onclick="showSection('live-map')" class="cta-secondary">View Network</button>
+                    </div>
+                    <div class="live-stats-bar">
+                        <div class="stat-item">
+                            <span class="stat-value" id="stat-predictions">0</span>
+                            <span class="stat-label">Daily Forecasts</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="stat-accuracy">0</span>
+                            <span class="stat-label">Model Accuracy</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="stat-cities">0</span>
+                            <span class="stat-label">Connected Cities</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="live-stats-bar">
-                    <div class="stat-item">
-                        <span class="stat-value" id="total-predictions">1.2M</span>
-                        <span class="stat-label">Daily Forecasts</span>
+
+                <!-- Feature Highlights -->
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+                        <h3>98% Accuracy</h3>
+                        <p>Verified against millions of real-world traffic sensors.</p>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-value">98.4%</span>
-                        <span class="stat-label">Model Accuracy</span>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-lucide="cpu"></i></div>
+                        <h3>Neural Core</h3>
+                        <p>Processing complex weather and temporal patterns in milliseconds.</p>
                     </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-lucide="share-2"></i></div>
+                        <h3>Open API</h3>
+                        <p>Seamlessly integrate our traffic data into your infrastructure.</p>
+                    </div>
+                </div>
+
+                <!-- How it Works -->
+            </div>
+        </section>
+
+        <!-- 2. Live Network Map -->
+        <section id="live-map" class="spa-section">
+            <div class="section-header-centered">
+                <h2>Network Command Center</h2>
+                <p>Live highway segments with precision congestion overlays</p>
+            </div>
+            <div class="map-wrapper">
+                <div id="map-container" class="enterprise-map"></div>
+                <div class="map-legend">
+                    <div class="legend-title">Congestion Key</div>
+                    <div class="legend-row"><span class="key light"></span><span>< 2,000 vph</span></div>
+                    <div class="legend-row"><span class="key moderate"></span><span>2,000 - 4,500 vph</span></div>
+                    <div class="legend-row"><span class="key heavy"></span><span>> 4,500 vph</span></div>
                 </div>
             </div>
         </section>
 
-        <!-- Live Map Section -->
-        <section id="live-map" class="map-section">
-            <div class="section-header">
-                <h2>Real-Time Congestion Zones</h2>
-                <p>Interactive highway network with live volume overlays</p>
+        <!-- 3. Neural Predictor -->
+        <section id="forecast" class="spa-section">
+            <div class="section-header-centered">
+                <h2>Predictive Analysis</h2>
+                <p>Configure environmental variables to run a neural simulation</p>
             </div>
-            <div id="map-container" class="enterprise-map"></div>
-        </section>
-
-        <!-- Main Analytics Dashboard -->
-        <section id="forecast" class="analytics-section">
-            <div class="section-header">
-                <h2>Deep Neural Analysis</h2>
-                <p>Input your parameters to generate a high-fidelity prediction</p>
-            </div>
-
-            <div class="enterprise-grid">
-                <!-- Inputs Side -->
+            
+            <div class="analytics-main-grid">
                 <div class="glass-card input-panel">
                     <form id="prediction-form">
                         <div class="input-row">
-                            <label><i data-lucide="map-pin"></i> Detected Location</label>
-                            <div class="location-badge" id="current-location">Auto-detecting...</div>
-                        </div>
-                        
-                        <div class="input-row">
-                            <label><i data-lucide="calendar"></i> Target Date & Time</label>
+                            <label><i data-lucide="calendar"></i> Simulation Date</label>
                             <input type="datetime-local" id="date_time" required>
                         </div>
-
                         <div class="input-row">
                             <label>Weather Condition</label>
                             <div class="weather-chips">
@@ -96,23 +130,16 @@
                                 <div class="weather-chip" data-value="Mist"><i data-lucide="wind"></i><span>Fog</span></div>
                             </div>
                         </div>
-
                         <div class="input-row">
-                            <label><i data-lucide="thermometer"></i> Temperature (K)</label>
-                            <input type="range" id="temp" min="240" max="320" value="288" class="range-slider">
-                            <span class="range-value" id="temp-val">288 K</span>
+                            <label><i data-lucide="thermometer"></i> Temperature: <span id="temp-val">288 K</span></label>
+                            <input type="range" id="temp" min="240" max="320" value="288" class="brand-slider">
                         </div>
-
-                        <button type="submit" class="enterprise-btn" id="submit-btn">
-                            <span>Execute Analysis</span>
-                            <div class="loader" id="loader"></div>
-                        </button>
+                        <button type="submit" class="enterprise-btn" id="submit-btn">Execute Simulation</button>
                     </form>
                 </div>
 
-                <!-- Central Gauge -->
-                <div class="glass-card gauge-panel">
-                    <div class="gauge-hero">
+                <div class="glass-card main-display-panel">
+                    <div class="gauge-and-stats">
                         <div class="meter-container-large">
                             <svg class="meter-large" viewBox="0 0 100 50">
                                 <path class="meter-bg" d="M10 50 A40 40 0 0 1 90 50" />
@@ -120,84 +147,112 @@
                             </svg>
                             <div class="meter-content">
                                 <span class="meter-percent" id="meter-percentage">0%</span>
-                                <span class="meter-label">Congestion</span>
+                                <span class="meter-status" id="traffic-status">STANDBY</span>
                             </div>
                         </div>
-                        <div class="prediction-display">
-                            <span class="pred-number" id="prediction-number">0</span>
-                            <span class="pred-unit">VEHICLES / HOUR</span>
+                        <div class="prediction-stats">
+                            <span class="vph-number" id="prediction-number">0</span>
+                            <span class="vph-label">VEHICLES / HOUR</span>
+                            <span class="context-label" id="prediction-context">Awaiting input...</span>
                         </div>
-                        <div id="traffic-status" class="status-pill">Ready</div>
                     </div>
                 </div>
 
-                <!-- Insights Section -->
                 <div class="glass-card insights-panel">
-                    <h3>Smart Diagnostics</h3>
-                    <div class="insights-list">
-                        <div class="insight-item">
-                            <i data-lucide="brain"></i>
-                            <div>
-                                <label>AI Reasoning</label>
-                                <p id="insight-reason">-</p>
-                            </div>
+                    <h3>Diagnostics</h3>
+                    <div class="diag-list">
+                        <div class="diag-item">
+                            <i data-lucide="brain-circuit"></i>
+                            <div><label>Reasoning</label><p id="insight-reason">-</p></div>
                         </div>
-                        <div class="insight-item">
-                            <i data-lucide="compass"></i>
-                            <div>
-                                <label>Recommendation</label>
-                                <p id="insight-advice">-</p>
-                            </div>
+                        <div class="diag-item">
+                            <i data-lucide="navigation"></i>
+                            <div><label>Advice</label><p id="insight-advice">-</p></div>
                         </div>
-                        <div class="insight-item">
-                            <i data-lucide="target"></i>
-                            <div>
-                                <label>Confidence Interval</label>
-                                <p id="confidence-range">-</p>
-                            </div>
+                        <div class="diag-item">
+                            <i data-lucide="activity"></i>
+                            <div><label>Confidence</label><p id="confidence-range">-</p></div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Full-Width Trend Section -->
-            <div class="glass-card chart-panel">
-                <div class="chart-header">
-                    <h3>24-Hour Predictive Timeline</h3>
-                    <div class="chart-legend">
-                        <span class="legend-item"><span class="dot light"></span> Light</span>
-                        <span class="legend-item"><span class="dot moderate"></span> Moderate</span>
-                        <span class="legend-item"><span class="dot heavy"></span> Heavy</span>
+                <div class="glass-card full-width chart-panel">
+                    <div class="chart-header">
+                        <h3>Predictive Timeline</h3>
+                        <div class="chart-actions">
+                            <button class="btn-icon" onclick="exportCSV()"><i data-lucide="download"></i> Export CSV</button>
+                        </div>
                     </div>
-                </div>
-                <div class="canvas-wrapper">
-                    <canvas id="forecastChart"></canvas>
-                </div>
-                <div class="scrubber-container">
-                    <input type="range" id="time-scrubber" min="0" max="23" value="0" class="scrubber">
-                    <div class="scrubber-labels">
-                        <span>00:00</span>
-                        <span>06:00</span>
-                        <span>12:00</span>
-                        <span>18:00</span>
-                        <span>23:00</span>
+                    <div class="chart-canvas-container">
+                        <canvas id="forecastChart"></canvas>
+                    </div>
+                    <div class="scrubber-box">
+                        <input type="range" id="time-scrubber" min="0" max="23" value="0" class="brand-slider scrubber">
+                        <div class="scrubber-times"><span>00:00</span><span>12:00</span><span>23:00</span></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Route Planner Section (Placeholder) -->
-        <section id="planner" class="planner-section">
-            <div class="glass-card empty-state">
-                <i data-lucide="map"></i>
-                <h2>Route Planner</h2>
-                <p>Multi-stop route optimization based on temporal traffic predictions is coming soon.</p>
+        <!-- 4. Deep Analytics -->
+        <section id="analytics" class="spa-section">
+            <div class="section-header-centered">
+                <h2>Global Performance Metrics</h2>
+                <p>Accuracy audit and historical congestion heatmaps</p>
+            </div>
+            <div class="analytics-grid-infinite">
+                <div class="glass-card">
+                    <h3>Accuracy Score</h3>
+                    <div class="score-display">98.4<span class="unit">%</span></div>
+                    <p class="score-desc">Model performance over the last 30 days based on ground-truth sensor data.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Error Rate (MAE)</h3>
+                    <div class="score-display">142<span class="unit">vph</span></div>
+                    <p class="score-desc">Mean Absolute Error across peak and off-peak scenarios.</p>
+                </div>
+                <div class="glass-card full-width">
+                    <h3>Congestion Heatmap</h3>
+                    <div class="heatmap-placeholder">
+                        <!-- Heatmap will be rendered via JS -->
+                        <div id="heatmap-calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Route Planner -->
+        <section id="planner" class="spa-section">
+            <div class="section-header-centered">
+                <h2>Optimal Route Discovery</h2>
+                <p>Calculate best departure times and route paths</p>
+            </div>
+            <div class="planner-grid">
+                <div class="glass-card">
+                    <div class="input-row"><label>Origin</label><input type="text" placeholder="I-94 Entry Point A"></div>
+                    <div class="input-row"><label>Destination</label><input type="text" placeholder="Downtown Hub B"></div>
+                    <button class="enterprise-btn">Calculate Best Path</button>
+                </div>
+                <div class="glass-card route-results">
+                    <div class="empty-route"><i data-lucide="map"></i><p>Select routes to see time savings</p></div>
+                </div>
             </div>
         </section>
     </main>
 
-    <footer class="enterprise-footer">
-        <p>&copy; 2026 TrafficFlow AI Enterprise. All systems operational.</p>
+    <footer class="infinity-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="nav-logo"><i data-lucide="zap"></i><span>TrafficFlow</span></div>
+                <p>Building the nervous system of the smart city.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">GitHub</a>
+                <a href="#">API Docs</a>
+                <a href="#">About Project</a>
+            </div>
+        </div>
+        <div class="footer-bottom">All Systems Operational &bull; Live v2.4.0</div>
     </footer>
 
     <script src="script.js"></script>
