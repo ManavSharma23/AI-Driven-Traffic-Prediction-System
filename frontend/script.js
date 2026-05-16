@@ -214,32 +214,6 @@ function exportCSV() {
     a.href = url; a.download = 'traffic_forecast.csv'; a.click();
 }
 
-// --- Route Planner Intelligence ---
-function calculateRoutes() {
-    const resultsContainer = document.querySelector('.route-results');
-    resultsContainer.innerHTML = '<div class="loader-pulse">Calculating optimal paths...</div>';
-    
-    setTimeout(() => {
-        resultsContainer.innerHTML = `
-            <h3>3 Optimal Paths Found</h3>
-            <div class="route-option best">
-                <div class="route-meta"><strong>I-94 Express</strong> <span>18 mins</span></div>
-                <div class="route-desc">Best flow detected by Neural Engine.</div>
-            </div>
-            <div class="route-option">
-                <div class="route-meta"><strong>Local Arterial</strong> <span>24 mins</span></div>
-                <div class="route-desc">Heavier surface street congestion.</div>
-            </div>
-            <div class="route-advice">
-                <i data-lucide="info"></i>
-                <span>Smart Tip: Leave in 15 minutes to save 8 minutes of idle time.</span>
-            </div>
-        `;
-        lucide.createIcons();
-    }, 1500);
-}
-
-// Attach to button
 document.querySelector('#planner .enterprise-btn').addEventListener('click', calculateRoutes);
 
 // --- Analytics Phase 3: Observatory Logic ---
