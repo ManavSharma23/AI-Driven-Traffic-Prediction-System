@@ -28,20 +28,47 @@
         </div>
     </div>
 
-    <!-- Frosted Glass Navigation -->
+    <!-- Frosted Glass Navigation (Mockup Accurate) -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo" onclick="showSection('hero')">
-                <i data-lucide="zap" class="logo-icon"></i>
-                <span>TrafficFlow <span class="badge-pro">INFINITY</span></span>
+                <div class="logo-box">
+                    <i data-lucide="zap" class="logo-icon"></i>
+                </div>
+                <div class="logo-text">
+                    <div class="brand">TrafficFlow <span class="accent-infinity">INFINITY</span></div>
+                    <div class="sub-brand">AI-Powered Traffic Intelligence</div>
+                </div>
             </div>
+
             <div class="nav-links">
-                <a href="javascript:void(0)" onclick="showSection('hero')" id="nav-hero" class="active">Home</a>
-                <a href="javascript:void(0)" onclick="showSection('live-map')" id="nav-live-map">Network Map</a>
-                <a href="javascript:void(0)" onclick="showSection('forecast')" id="nav-forecast">Neural Predictor</a>
-                <a href="javascript:void(0)" onclick="showSection('analytics')" id="nav-analytics">Analytics</a>
-                <a href="javascript:void(0)" onclick="showSection('planner')" id="nav-planner">Route Planner</a>
-                <button id="theme-toggle" class="theme-btn"><i data-lucide="moon"></i></button>
+                <a href="javascript:void(0)" onclick="showSection('hero')" id="nav-hero" class="nav-item active">
+                    <i data-lucide="home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="javascript:void(0)" onclick="showSection('live-map')" id="nav-live-map" class="nav-item">
+                    <i data-lucide="map"></i>
+                    <span>Network Map</span>
+                </a>
+                <a href="javascript:void(0)" onclick="showSection('forecast')" id="nav-forecast" class="nav-item">
+                    <i data-lucide="brain"></i>
+                    <span>Neural Predictor</span>
+                </a>
+                <a href="javascript:void(0)" onclick="showSection('analytics')" id="nav-analytics" class="nav-item">
+                    <i data-lucide="bar-chart-3"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="javascript:void(0)" onclick="showSection('planner')" id="nav-planner" class="nav-item">
+                    <i data-lucide="route"></i>
+                    <span>Route Planner</span>
+                </a>
+            </div>
+
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-btn-round"><i data-lucide="moon"></i></button>
+                <button class="btn-get-started" onclick="showSection('live-map')">
+                    <i data-lucide="rocket"></i> Get Started
+                </button>
             </div>
         </div>
     </nav>
