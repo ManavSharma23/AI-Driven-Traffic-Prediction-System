@@ -497,3 +497,32 @@ showSection = (id) => {
         setTimeout(initBlueprintIntelligence, 200);
     }
 };
+
+// --- Legend Filtering Logic ---
+let activeMapLayers = [];
+
+function filterMap(type, el) {
+    // Update UI
+    document.querySelectorAll('.legend-item').forEach(item => item.classList.remove('active'));
+    el.classList.add('active');
+
+    // Filter Layers
+    activeMapLayers.forEach(layer => {
+        const vol = layer.volume;
+        let show = false;
+        
+        if (type === 'all') show = true;
+        else if (type === 'smooth' && vol < 2000) show = true;
+        else if (type === 'medium' && vol >= 2000 && vol <= 4500) show = true;
+        else if (type === 'congested' && vol > 4500) show = true;
+
+        if (show) layer.addTo(map);
+        else map.removeLayer(layer);
+    });
+}
+
+// Modify initMap to store layers (Internal use only)
+function storeLayer(layer, vol) {
+    layer.volume = vol;
+    activeMapLayers.push(layer);
+}
