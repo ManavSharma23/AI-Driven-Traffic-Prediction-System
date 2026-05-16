@@ -61,57 +61,104 @@
                         <div class="stat-item">
                             <span class="stat-value" id="stat-predictions">0</span>
                             <span class="stat-label">Daily Forecasts</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="stat-accuracy">0</span>
-                            <span class="stat-label">Model Accuracy</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="stat-cities">0</span>
-                            <span class="stat-label">Connected Cities</span>
-                        </div>
+                        <button class="btn-primary" onclick="showSection('live-map')">Get Started <i data-lucide="arrow-right"></i></button>
+                        <button class="btn-secondary" onclick="showSection('live-map')">View Network Map <i data-lucide="map"></i></button>
                     </div>
                 </div>
 
-                <!-- Feature Highlights -->
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i data-lucide="shield-check"></i></div>
-                        <h3>98% Accuracy</h3>
-                        <p>Verified against millions of real-world traffic sensors.</p>
+                <div class="hero-visual">
+                    <div class="visual-bg-glow"></div>
+                    <!-- Floating Map Cards -->
+                    <div class="floating-card c1">
+                        <div class="f-label">I-75 Northbound</div>
+                        <div class="f-val">4,520 <small>vph</small></div>
+                        <div class="f-chart"></div>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i data-lucide="cpu"></i></div>
-                        <h3>Neural Core</h3>
-                        <p>Processing complex weather and temporal patterns in milliseconds.</p>
+                    <div class="floating-card c2">
+                        <div class="f-label">Downtown Connector</div>
+                        <div class="f-val">3,280 <small>vph</small></div>
+                        <div class="f-chart"></div>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i data-lucide="share-2"></i></div>
-                        <h3>Open API</h3>
-                        <p>Seamlessly integrate our traffic data into your infrastructure.</p>
+                    <div class="floating-card c3">
+                        <div class="f-label">Mapleton Expressway</div>
+                        <div class="f-val">2,150 <small>vph</small></div>
+                        <div class="f-chart"></div>
                     </div>
                 </div>
+            </div>
 
-                <!-- How it Works -->
-                <div class="how-it-works-section">
-                    <h2 class="section-title">The Neural Pipeline</h2>
-                    <div class="steps-grid">
-                        <div class="step-card">
-                            <span class="step-num">01</span>
-                            <h4>Data Ingestion</h4>
-                            <p>Millions of real-world sensor data points are ingested every second.</p>
-                        </div>
-                        <div class="step-card">
-                            <span class="step-num">02</span>
-                            <h4>Deep Analysis</h4>
-                            <p>Neural cores process weather, holidays, and temporal patterns.</p>
-                        </div>
-                        <div class="step-card">
-                            <span class="step-num">03</span>
-                            <h4>Live Forecasting</h4>
-                            <p>High-accuracy traffic predictions delivered in milliseconds.</p>
-                        </div>
+            <!-- Stats Ribbon -->
+            <div class="stats-ribbon">
+                <div class="stat-box">
+                    <div class="stat-icon purple"><i data-lucide="calendar"></i></div>
+                    <div class="stat-info">
+                        <h3 id="stat-predictions">0</h3>
+                        <p>Daily Forecasts Generated</p>
                     </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon green"><i data-lucide="target"></i></div>
+                    <div class="stat-info">
+                        <h3 id="stat-accuracy">0%</h3>
+                        <p>Model Accuracy (Verified)</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon blue"><i data-lucide="building-2"></i></div>
+                    <div class="stat-info">
+                        <h3 id="stat-cities">0</h3>
+                        <p>Connected Cities</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon pink"><i data-lucide="activity"></i></div>
+                    <div class="stat-info">
+                        <h3>24/7</h3>
+                        <p>Real-time Traffic Monitoring</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-divider">
+                <h2>Engineered for Smarter Cities</h2>
+                <div class="divider-line"></div>
+            </div>
+
+            <!-- Feature Grid -->
+            <div class="feature-grid-mockup">
+                <div class="mock-feature-card">
+                    <div class="m-icon purple"><i data-lucide="cpu"></i></div>
+                    <h4>Neural Prediction Engine</h4>
+                    <p>Deep learning models process complex patterns to deliver ultra-accurate traffic volume forecasts.</p>
+                    <a href="#" class="learn-more">Learn More <i data-lucide="arrow-right"></i></a>
+                    <div class="m-sparkline purple"></div>
+                </div>
+                <div class="mock-feature-card">
+                    <div class="m-icon green"><i data-lucide="shield-check"></i></div>
+                    <h4>Real-time Intelligence</h4>
+                    <p>Live data from thousands of sensors and sources keeps every prediction one step ahead.</p>
+                    <a href="#" class="learn-more">Learn More <i data-lucide="arrow-right"></i></a>
+                    <div class="m-radar"></div>
+                </div>
+                <div class="mock-feature-card">
+                    <div class="m-icon blue"><i data-lucide="share-2"></i></div>
+                    <h4>Open & Connected</h4>
+                    <p>Seamlessly integrate our traffic data and predictions into your systems via powerful APIs.</p>
+                    <a href="#" class="learn-more">Learn More <i data-lucide="arrow-right"></i></a>
+                    <div class="m-cubes"></div>
+                </div>
+            </div>
+
+            <!-- Partner Bar -->
+            <div class="partner-bar">
+                <span class="partner-title">TRUSTED BY FORWARD-THINKING ORGANIZATIONS</span>
+                <div class="partner-logos">
+                    <span><i data-lucide="building"></i> CityFlow</span>
+                    <span><i data-lucide="train"></i> MetroTransit</span>
+                    <span><i data-lucide="microscope"></i> SmartCity Labs</span>
+                    <span><i data-lucide="landmark"></i> UrbanLogix</span>
+                    <span><i data-lucide="map-pin"></i> RoadSense</span>
+                    <span><i data-lucide="zap"></i> FlowOps</span>
                 </div>
             </div>
         </section>
