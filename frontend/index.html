@@ -117,8 +117,11 @@
                 <div class="glass-card input-panel">
                     <form id="prediction-form">
                         <div class="input-row">
-                            <label><i data-lucide="calendar"></i> Simulation Date</label>
-                            <input type="datetime-local" id="date_time" required>
+                            <label><i data-lucide="calendar"></i> Simulation Schedule</label>
+                            <div class="split-inputs">
+                                <input type="date" id="sim_date" required>
+                                <input type="time" id="sim_time" required>
+                            </div>
                         </div>
                         <div class="input-row">
                             <label>Weather Condition</label>

@@ -88,8 +88,10 @@ function initHeatmap() {
 document.getElementById('prediction-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const weather = document.querySelector('.weather-chip.active').dataset.value;
+    const dateVal = document.getElementById('sim_date').value;
+    const timeVal = document.getElementById('sim_time').value;
     const formData = {
-        date_time: document.getElementById('date_time').value.replace('T', ' ') + ':00',
+        date_time: `${dateVal} ${timeVal}:00`,
         temp: parseFloat(document.getElementById('temp').value),
         rain_1h: 0, snow_1h: 0, clouds_all: 40, weather_main: weather
     };
