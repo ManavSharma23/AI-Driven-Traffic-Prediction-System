@@ -969,3 +969,17 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     display: flex; align-items: center; justify-content: center; gap: 12px;
 }
 .execute-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(99,102,241,0.4); }
+
+/* --- UI Fix: Widening Simulation Inputs --- */
+.module-input-wrapper { 
+    min-width: 280px; /* Ensuring enough width for full date/time strings */
+    padding: 0 2rem;
+    height: 80px; /* Slightly taller for better vertical balance */
+}
+.module-input-wrapper input {
+    font-size: 1.6rem; /* Slightly larger for impact */
+    letter-spacing: 0.02em;
+}
+.schedule-grid {
+    gap: 3.5rem; /* More space between the two modules */
+}
