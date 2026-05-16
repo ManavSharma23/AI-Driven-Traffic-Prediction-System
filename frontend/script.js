@@ -448,3 +448,75 @@ showSection = (id) => {
         setTimeout(() => map.invalidateSize(), 300);
     }
 };
+
+// --- Reference Blueprint: Command Center Intelligence ---
+let miniTrendChart = null;
+
+function initBlueprintIntelligence() {
+    initMiniTrendChart();
+    populateIncidents();
+    populateSegments();
+}
+
+function initMiniTrendChart() {
+    const ctx = document.getElementById('miniTrendChart').getContext('2d');
+    if (miniTrendChart) miniTrendChart.destroy();
+
+    const labels = ['10 AM', '2 PM', '6 PM', '10 PM', '2 AM', '6 AM', '10 AM'];
+    const currentData = [3000, 4500, 7500, 5000, 2000, 3500, 4200];
+    const predictedData = [3200, 4800, 7200, 4800, 1800, 3200, 4100];
+
+    miniTrendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Current Flow',
+                    data: currentData,
+                    borderColor: '#6366f1',
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#6366f1',
+                    tension: 0.4
+                },
+                {
+                    label: 'Predicted Flow',
+                    data: predictedData,
+                    borderColor: 'rgba(99, 102, 241, 0.3)',
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { display: false },
+                x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 9 } } }
+            }
+        }
+    });
+}
+
+function populateIncidents() {
+    // Already has static items in HTML for reference accuracy, 
+    // but can be extended here for dynamic updates
+}
+
+function populateSegments() {
+    // Static items match reference, can be linked to live data here
+}
+
+// Hook into the live-map trigger
+const originalShowSectionBP = showSection;
+showSection = (id) => {
+    originalShowSectionBP(id);
+    if (id === 'live-map') {
+        setTimeout(initBlueprintIntelligence, 200);
+    }
+};
