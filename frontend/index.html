@@ -594,11 +594,16 @@
 
                 <!-- 6. Prediction Log -->
                 <div class="glass-card full-width log-box">
-                    <div class="card-header">
+                    <div class="card-header-flex">
+                    <div class="title-group">
                         <h3>Prediction Audit Log</h3>
-                        <button class="btn-icon small"><i data-lucide="download"></i> Download CSV</button>
+                        <p>60-minute rolling inference window</p>
                     </div>
-                    <table class="audit-table">
+                    <button class="export-btn-premium" onclick="exportAuditLog()">
+                        <i data-lucide="download"></i> <span>Export CSV</span>
+                    </button>
+                </div>
+    <table class="audit-table">
                         <thead>
                             <tr>
                                 <th>Timestamp</th>

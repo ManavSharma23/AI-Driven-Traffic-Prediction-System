@@ -20,9 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- SPA Navigation ---
+// --- Master SPA Navigation ---
 function showSection(id) {
     const sections = document.querySelectorAll('.spa-section');
-    const navLinks = document.querySelectorAll('.nav-links a');
+    const navLinks = document.querySelectorAll('.nav-item');
     
     // Update Nav
     navLinks.forEach(link => {
@@ -34,8 +35,16 @@ function showSection(id) {
     sections.forEach(section => {
         if (section.id === id) {
             section.classList.add('active');
-            // Re-trigger map resize if map section shown
-            if (id === 'live-map' && map) setTimeout(() => map.invalidateSize(), 300);
+            
+            // Initialization Logic per section
+            if (id === 'live-map') {
+                if (map) setTimeout(() => map.invalidateSize(), 300);
+                initCommandCenter(); // Wake up live systems
+            } else if (id === 'analytics') {
+                initAccuracyChart();
+                initNeuralHeatmap();
+                initAuditLog();
+            }
         } else {
             section.classList.remove('active');
         }
@@ -43,18 +52,22 @@ function showSection(id) {
 }
 
 function initMap() {
+    if (map) return;
     map = L.map('map-container').setView([44.9778, -93.2650], 12);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
     const highwayStyles = [
-        { name: "I-94 West", coords: [[44.95, -93.35], [44.98, -93.15]], color: '#ef4444', vol: '5,240' },
-        { name: "I-35E South", coords: [[45.05, -93.20], [44.90, -93.20]], color: '#fbbf24', vol: '3,120' },
-        { name: "I-394 Hub", coords: [[44.97, -93.50], [44.97, -93.10]], color: '#34d399', vol: '1,850' }
+        { name: "I-94 East", coords: [[44.95, -93.35], [44.98, -93.15]], vol: 5240 },
+        { name: "I-35E South", coords: [[45.05, -93.20], [44.90, -93.20]], vol: 3120 },
+        { name: "I-394 Hub", coords: [[44.97, -93.50], [44.97, -93.10]], vol: 1850 },
+        { name: "Hwy 55 North", coords: [[44.99, -93.30], [45.05, -93.30]], vol: 800 }
     ];
 
     highwayStyles.forEach(h => {
-        const poly = L.polyline(h.coords, {color: h.color, weight: 8, opacity: 0.6}).addTo(map);
-        poly.bindPopup(`<strong>${h.name}</strong><br>Live Volume: ${h.vol} vph<br><span style="color:${h.color}">Status: ${h.vol > 4000 ? 'Heavy' : 'Stable'}</span>`);
+        const color = h.vol > 4500 ? '#ef4444' : h.vol > 2000 ? '#f59e0b' : '#10b981';
+        const poly = L.polyline(h.coords, {color: color, weight: 6, opacity: 0.8}).addTo(map);
+        poly.bindPopup(`<strong>${h.name}</strong><br>Volume: ${h.vol} vph`);
+        storeLayer(poly, h.vol);
     });
 }
 
@@ -326,14 +339,6 @@ function initAuditLog() {
     }
 }
 
-// Hook into section switching
-const originalShowSection = showSection;
-showSection = (id) => {
-    originalShowSection(id);
-    if (id === 'analytics') {
-        setTimeout(refreshAnalytics, 100);
-    }
-};
 
 // --- Phase 4: Command Center Sentience ---
 function initCommandCenter() {
@@ -406,15 +411,6 @@ async function runCommandCenterSim() {
     }, 800);
 }
 
-// Hook into section switching to start the sentient systems
-const prevShowSectionCC = showSection;
-showSection = (id) => {
-    prevShowSectionCC(id);
-    if (id === 'live-map') {
-        initCommandCenter();
-        setTimeout(() => map.invalidateSize(), 300);
-    }
-};
 
 // --- Reference Blueprint: Command Center Intelligence ---
 let miniTrendChart = null;
@@ -479,14 +475,6 @@ function populateSegments() {
     // Static items match reference, can be linked to live data here
 }
 
-// Hook into the live-map trigger
-const originalShowSectionBP = showSection;
-showSection = (id) => {
-    originalShowSectionBP(id);
-    if (id === 'live-map') {
-        setTimeout(initBlueprintIntelligence, 200);
-    }
-};
 
 // --- Legend Filtering Logic ---
 let activeMapLayers = [];

@@ -1168,3 +1168,16 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .model-accuracy { text-align: right; }
 .model-accuracy label { display: block; font-size: 0.65rem; font-weight: 800; color: var(--primary); letter-spacing: 0.1em; margin-bottom: 4px; }
 .model-accuracy span { font-size: 1.2rem; font-weight: 800; color: white; }
+
+/* --- Header Alignment Fix --- */
+.chart-header, .card-header-flex { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 2.5rem; 
+}
+.chart-actions, .title-group { display: flex; align-items: center; gap: 1rem; }
+
+.export-btn-premium, .btn-icon {
+    margin-left: auto; /* Force to right if in a flex container */
+}
