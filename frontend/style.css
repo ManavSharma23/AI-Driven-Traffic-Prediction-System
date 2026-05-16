@@ -665,3 +665,41 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .side-stat label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem; }
 .side-stat span { font-size: 1.8rem; font-weight: 800; color: var(--text); }
 .side-stat span.success { color: var(--success); }
+
+/* --- Phase 5: Neural Flow Background --- */
+.grid-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 200%; height: 200%;
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridDrift 60s linear infinite;
+    z-index: 1;
+}
+@keyframes gridDrift {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-50px, -50px); }
+}
+
+.neural-particles { position: absolute; width: 100%; height: 100%; overflow: hidden; z-index: 0; }
+.node {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+    filter: blur(60px);
+    opacity: 0.4;
+    animation: floatNode 20s infinite alternate ease-in-out;
+}
+.n1 { top: 10%; left: 10%; animation-duration: 25s; }
+.n2 { top: 60%; left: 80%; background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%); animation-duration: 30s; animation-delay: -5s; }
+.n3 { top: 40%; left: 40%; animation-duration: 20s; animation-delay: -10s; }
+.n4 { top: 80%; left: 20%; background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%); animation-duration: 35s; }
+.n5 { top: 20%; left: 70%; animation-duration: 28s; animation-delay: -15s; }
+
+@keyframes floatNode {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(100px, 50px) scale(1.2); }
+    100% { transform: translate(-50px, 100px) scale(0.9); }
+}
