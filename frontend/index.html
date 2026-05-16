@@ -288,30 +288,53 @@
             </div>
             
             <div class="analytics-main-grid">
-                <div class="glass-card input-panel">
-                    <form id="prediction-form">
-                        <div class="input-row">
-                            <label><i data-lucide="calendar"></i> Simulation Schedule</label>
-                            <div class="split-inputs">
-                                <input type="text" id="sim_date" placeholder="YYYY-MM-DD" required>
-                                <input type="text" id="sim_time" placeholder="HH:MM" required>
+                <!-- Simulation Schedule (Mockup Accurate) -->
+                <div class="glass-card simulation-schedule-card">
+                    <div class="schedule-header">
+                        <div class="schedule-icon-box">
+                            <i data-lucide="calendar-days"></i>
+                        </div>
+                        <div class="schedule-title-group">
+                            <h3>SIMULATION SCHEDULE</h3>
+                            <p>Select the date and time for traffic simulation</p>
+                        </div>
+                    </div>
+
+                    <form id="prediction-form" class="schedule-form">
+                        <div class="schedule-grid">
+                            <!-- Date Input -->
+                            <div class="input-module">
+                                <label class="module-label">DATE</label>
+                                <div class="module-input-wrapper date-style">
+                                    <i data-lucide="calendar" class="input-icon"></i>
+                                    <input type="text" id="sim_date" value="2023-12-23" placeholder="YYYY-MM-DD">
+                                    <i data-lucide="chevron-down" class="chevron"></i>
+                                </div>
+                                <div class="module-helper">
+                                    <i data-lucide="calendar"></i> YYYY-MM-DD
+                                </div>
+                            </div>
+
+                            <!-- Time Input -->
+                            <div class="input-module">
+                                <label class="module-label">TIME</label>
+                                <div class="module-input-wrapper time-style">
+                                    <i data-lucide="clock" class="input-icon"></i>
+                                    <input type="text" id="sim_time" value="12:23" placeholder="HH:MM">
+                                    <i data-lucide="chevron-down" class="chevron"></i>
+                                </div>
+                                <div class="module-helper">
+                                    <i data-lucide="clock"></i> 24-Hour Format
+                                </div>
                             </div>
                         </div>
-                        <div class="input-row">
-                            <label>Weather Condition</label>
-                            <div class="weather-chips">
-                                <div class="weather-chip active" data-value="Clear"><i data-lucide="sun"></i><span>Clear</span></div>
-                                <div class="weather-chip" data-value="Clouds"><i data-lucide="cloud"></i><span>Cloudy</span></div>
-                                <div class="weather-chip" data-value="Rain"><i data-lucide="cloud-rain"></i><span>Rain</span></div>
-                                <div class="weather-chip" data-value="Snow"><i data-lucide="snowflake"></i><span>Snow</span></div>
-                                <div class="weather-chip" data-value="Mist"><i data-lucide="wind"></i><span>Fog</span></div>
-                            </div>
-                        </div>
-                        <div class="input-row">
-                            <label><i data-lucide="thermometer"></i> Temperature: <span id="temp-val">288 K</span></label>
-                            <input type="range" id="temp" min="240" max="320" value="288" class="brand-slider">
-                        </div>
-                        <button type="submit" class="enterprise-btn" id="submit-btn">Execute Simulation</button>
+
+                        <!-- Hidden weather chip for logic continuity -->
+                        <div style="display:none;"><div class="weather-chip active" data-value="Clear"></div><input type="range" id="temp" value="288"></div>
+
+                        <button type="submit" class="execute-btn">
+                            <i data-lucide="zap"></i> RUN NEURAL SIMULATION
+                        </button>
                     </form>
                 </div>
 
