@@ -241,3 +241,105 @@ function calculateRoutes() {
 
 // Attach to button
 document.querySelector('#planner .enterprise-btn').addEventListener('click', calculateRoutes);
+
+// --- Analytics Phase 3: Observatory Logic ---
+let accuracyChart = null;
+
+function refreshAnalytics() {
+    initAccuracyChart();
+    initNeuralHeatmap();
+    initAuditLog();
+    lucide.createIcons();
+}
+
+function initAccuracyChart() {
+    const ctx = document.getElementById('accuracyTrendChart').getContext('2d');
+    if (accuracyChart) accuracyChart.destroy();
+
+    const labels = Array.from({length: 24}, (_, i) => `${i}:00`);
+    const actualData = Array.from({length: 24}, () => Math.floor(Math.random() * 5000) + 500);
+    const predictedData = actualData.map(v => v + (Math.random() * 400 - 200));
+
+    accuracyChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Real Sensor Data',
+                    data: actualData,
+                    borderColor: '#10b981',
+                    borderWidth: 2,
+                    fill: false,
+                    pointRadius: 0,
+                    tension: 0.3
+                },
+                {
+                    label: 'AI Prediction',
+                    data: predictedData,
+                    borderColor: '#6366f1',
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                    fill: false,
+                    pointRadius: 0,
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'top', labels: { color: '#94a3b8', font: { weight: '600' } } } },
+            scales: {
+                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+            }
+        }
+    });
+}
+
+function initNeuralHeatmap() {
+    const grid = document.getElementById('neural-heatmap');
+    grid.innerHTML = '';
+    for (let i = 0; i < 24 * 7; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'heat-cell';
+        const intensity = Math.random();
+        const color = intensity > 0.8 ? '#ef4444' : intensity > 0.4 ? '#f59e0b' : '#10b981';
+        cell.style.background = color;
+        cell.style.opacity = intensity * 0.8 + 0.2;
+        grid.appendChild(cell);
+    }
+}
+
+function initAuditLog() {
+    const body = document.getElementById('audit-log-body');
+    body.innerHTML = '';
+    const rows = 8;
+    for (let i = 0; i < rows; i++) {
+        const actual = Math.floor(Math.random() * 4000) + 1000;
+        const pred = actual + (Math.random() * 200 - 100);
+        const variance = Math.abs(actual - pred).toFixed(0);
+        const status = variance < 100 ? 'good' : 'fair';
+        
+        body.innerHTML += `
+            <tr>
+                <td>Today, 1${i}:00</td>
+                <td>Clear Sky</td>
+                <td>${pred.toFixed(0)}</td>
+                <td>${actual}</td>
+                <td>${variance} vph</td>
+                <td><span class="status-badge ${status}">${status}</span></td>
+            </tr>
+        `;
+    }
+}
+
+// Hook into section switching
+const originalShowSection = showSection;
+showSection = (id) => {
+    originalShowSection(id);
+    if (id === 'analytics') {
+        setTimeout(refreshAnalytics, 100);
+    }
+};

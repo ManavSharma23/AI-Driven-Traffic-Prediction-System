@@ -199,27 +199,135 @@
 
         <!-- 4. Deep Analytics -->
         <section id="analytics" class="spa-section">
-            <div class="section-header-centered">
-                <h2>Global Performance Metrics</h2>
-                <p>Accuracy audit and historical congestion heatmaps</p>
+            <!-- Global Actions Bar -->
+            <div class="analytics-actions-bar">
+                <div class="section-title-group">
+                    <h2>Model Observatory</h2>
+                    <p>Live accuracy auditing and system health metrics</p>
+                </div>
+                <div class="global-actions">
+                    <button class="btn-icon" onclick="exportCSV()"><i data-lucide="download"></i> Export CSV</button>
+                    <button class="btn-icon"><i data-lucide="file-text"></i> PDF Report</button>
+                    <button class="btn-icon primary-btn" onclick="refreshAnalytics()"><i data-lucide="refresh-cw"></i> Sync Data</button>
+                </div>
             </div>
-            <div class="analytics-grid-infinite">
-                <div class="glass-card">
-                    <h3>Accuracy Score</h3>
-                    <div class="score-display">98.4<span class="unit">%</span></div>
-                    <p class="score-desc">Model performance over the last 30 days based on ground-truth sensor data.</p>
+
+            <!-- 1. KPI Bar -->
+            <div class="kpi-bar">
+                <div class="kpi-card">
+                    <label>Accuracy Score</label>
+                    <div class="kpi-val">98.4% <span class="trend up">↑ 0.2%</span></div>
                 </div>
-                <div class="glass-card">
-                    <h3>Error Rate (MAE)</h3>
-                    <div class="score-display">142<span class="unit">vph</span></div>
-                    <p class="score-desc">Mean Absolute Error across peak and off-peak scenarios.</p>
+                <div class="kpi-card">
+                    <label>Mean Error (MAE)</label>
+                    <div class="kpi-val">142 <span class="trend down">↓ 12</span></div>
                 </div>
-                <div class="glass-card full-width">
-                    <h3>Congestion Heatmap</h3>
-                    <div class="heatmap-placeholder">
-                        <!-- Heatmap will be rendered via JS -->
-                        <div id="heatmap-calendar"></div>
+                <div class="kpi-card">
+                    <label>Inference Latency</label>
+                    <div class="kpi-val">18ms <span class="trend neutral">~</span></div>
+                </div>
+                <div class="kpi-card">
+                    <label>Data Drift</label>
+                    <div class="kpi-val">Low <span class="badge-success">Stable</span></div>
+                </div>
+            </div>
+
+            <div class="analytics-layout-grid">
+                <!-- 2. Predicted vs Actual Chart -->
+                <div class="glass-card main-chart-box">
+                    <div class="card-header">
+                        <h3>Ground Truth Validation</h3>
+                        <p>Predicted Volume vs. Real-Time Sensor Data (Last 24h)</p>
                     </div>
+                    <div class="chart-container-large">
+                        <canvas id="accuracyTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 3. Congestion Heatmap -->
+                <div class="glass-card heatmap-box">
+                    <div class="card-header">
+                        <h3>Temporal Intensity Map</h3>
+                        <p>Congestion density by Day and Hour</p>
+                    </div>
+                    <div id="neural-heatmap" class="heatmap-grid"></div>
+                    <div class="heatmap-legend">
+                        <span>Low</span>
+                        <div class="legend-scale"></div>
+                        <span>Peak</span>
+                    </div>
+                </div>
+
+                <!-- 4. MAE Breakdown -->
+                <div class="glass-card mae-box">
+                    <h3>MAE Scenario Breakdown</h3>
+                    <div class="bar-list">
+                        <div class="bar-item">
+                            <label>Peak AM (07:00-09:00)</label>
+                            <div class="bar-outer"><div class="bar-inner" style="width: 85%"></div></div>
+                            <span>185 vph</span>
+                        </div>
+                        <div class="bar-item">
+                            <label>Peak PM (16:00-18:00)</label>
+                            <div class="bar-outer"><div class="bar-inner" style="width: 92%"></div></div>
+                            <span>210 vph</span>
+                        </div>
+                        <div class="bar-item">
+                            <label>Midday Flow</label>
+                            <div class="bar-outer"><div class="bar-inner" style="width: 40%"></div></div>
+                            <span>88 vph</span>
+                        </div>
+                        <div class="bar-item">
+                            <label>Night/Off-Peak</label>
+                            <div class="bar-outer"><div class="bar-inner" style="width: 15%"></div></div>
+                            <span>42 vph</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Model Leaderboard -->
+                <div class="glass-card leaderboard-box">
+                    <h3>Model Leaderboard</h3>
+                    <div class="leaderboard-list">
+                        <div class="lb-item best">
+                            <span class="rank">1</span>
+                            <div class="model-info"><strong>XGBoost Regressor</strong><span>Ensemble Gradient Boosting</span></div>
+                            <span class="score">0.98 R²</span>
+                        </div>
+                        <div class="lb-item">
+                            <span class="rank">2</span>
+                            <div class="model-info"><strong>Random Forest</strong><span>Bagging Decision Trees</span></div>
+                            <span class="score">0.95 R²</span>
+                        </div>
+                        <div class="lb-item">
+                            <span class="rank">3</span>
+                            <div class="model-info"><strong>Linear Regression</strong><span>Statistical Baseline</span></div>
+                            <span class="score">0.82 R²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Prediction Log -->
+                <div class="glass-card full-width log-box">
+                    <div class="card-header">
+                        <h3>Prediction Audit Log</h3>
+                        <button class="btn-icon small"><i data-lucide="download"></i> Download CSV</button>
+                    </div>
+                    <table class="audit-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Weather</th>
+                                <th>Predicted</th>
+                                <th>Actual</th>
+                                <th>Variance</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="audit-log-body">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
