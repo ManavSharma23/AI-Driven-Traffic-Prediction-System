@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initWeatherChips();
     initHeroStats();
     initHeatmap();
+    
+    // Live Temp Update
+    document.getElementById('temp').addEventListener('input', (e) => {
+        document.getElementById('temp-val').textContent = e.target.value + ' K';
+    });
+
     showSection('hero'); // Start at Home
 });
 
