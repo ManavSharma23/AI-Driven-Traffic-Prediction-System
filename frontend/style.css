@@ -528,3 +528,38 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     z-index: 10;
     box-shadow: 0 0 15px var(--primary-glow);
 }
+
+/* Route Planner Results */
+.route-option {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    transition: 0.3s;
+}
+.route-option.best { border-color: var(--primary); background: rgba(99, 102, 241, 0.05); }
+.route-meta { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+.route-meta span { color: var(--primary); font-weight: 800; }
+.route-desc { font-size: 0.85rem; color: var(--text-muted); }
+
+.route-advice {
+    margin-top: 2rem;
+    padding: 1.25rem;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 1rem;
+    color: var(--success);
+    font-size: 0.9rem;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.loader-pulse {
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-weight: 600;
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
