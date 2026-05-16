@@ -1004,3 +1004,38 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     font-size: 1.5rem; font-weight: 700; color: white; 
     line-height: 1.2; 
 }
+
+/* --- Phase 10: Diagnostics Telemetry Upgrade --- */
+.diagnostics-card-telemetry { 
+    padding: 2.5rem; border-left: 4px solid var(--primary); 
+    background: rgba(3, 7, 18, 0.6) !important;
+}
+.diag-header-main { display: flex; align-items: center; gap: 12px; margin-bottom: 2.5rem; color: var(--primary); }
+.diag-header-main h3 { font-size: 1.1rem; font-weight: 800; letter-spacing: 0.1em; color: white; }
+
+.telemetry-feed { display: flex; flex-direction: column; gap: 1.5rem; }
+.telemetry-row { 
+    display: flex; align-items: center; gap: 1.5rem; padding-bottom: 1.5rem; 
+    border-bottom: 1px solid rgba(255,255,255,0.05); 
+}
+.telemetry-row:last-child { border: none; padding-bottom: 0; }
+
+.telemetry-node { 
+    width: 50px; height: 50px; border-radius: 50%; display: flex; 
+    align-items: center; justify-content: center; font-size: 1.2rem;
+    flex-shrink: 0;
+}
+.telemetry-node.purple { background: rgba(168, 85, 247, 0.1); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.2); }
+.telemetry-node.green { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+.telemetry-node.blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
+
+.telemetry-data { display: flex; flex-direction: column; gap: 4px; }
+.telemetry-data label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em; }
+.telemetry-data span { font-size: 1.1rem; font-weight: 700; color: white; }
+
+/* Subtle pulse for reasoning node */
+.telemetry-node.purple i { animation: nodePulse 2s infinite ease-in-out; }
+@keyframes nodePulse { 
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+}

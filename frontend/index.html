@@ -358,31 +358,42 @@
                     </div>
                 </div>
 
-                <!-- Diagnostics Panel (Mockup Accurate) -->
-                <div class="glass-card diagnostics-card">
-                    <h2 class="diag-title">Diagnostics</h2>
+                <!-- Diagnostics Telemetry (Master Upgrade) -->
+                <div class="glass-card diagnostics-card-telemetry">
+                    <div class="diag-header-main">
+                        <i data-lucide="activity"></i>
+                        <h3>SYSTEM DIAGNOSTICS</h3>
+                    </div>
                     
-                    <div class="diag-block">
-                        <div class="diag-icon purple"><i data-lucide="brain-circuit"></i></div>
-                        <div class="diag-content">
-                            <label>Reasoning</label>
-                            <h4 id="insight-reason">Predicted volume for 17:00</h4>
+                    <div class="telemetry-feed">
+                        <div class="telemetry-row">
+                            <div class="telemetry-node purple">
+                                <i data-lucide="brain-circuit"></i>
+                            </div>
+                            <div class="telemetry-data">
+                                <label>REASONING ENGINE</label>
+                                <span id="insight-reason">Analyzing peak-hour temporal patterns...</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="diag-block">
-                        <div class="diag-icon green"><i data-lucide="send"></i></div>
-                        <div class="diag-content">
-                            <label>Advice</label>
-                            <h4 id="insight-advice">Good</h4>
+                        <div class="telemetry-row">
+                            <div class="telemetry-node green">
+                                <i data-lucide="send"></i>
+                            </div>
+                            <div class="telemetry-data">
+                                <label>OPERATIONAL ADVICE</label>
+                                <span id="insight-advice">Optimal flow detected</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="diag-block">
-                        <div class="diag-icon blue"><i data-lucide="activity"></i></div>
-                        <div class="diag-content">
-                            <label>Confidence</label>
-                            <h4 id="confidence-range">4031 - 4733 vph</h4>
+                        <div class="telemetry-row">
+                            <div class="telemetry-node blue">
+                                <i data-lucide="target"></i>
+                            </div>
+                            <div class="telemetry-data">
+                                <label>CONFIDENCE BOUNDS</label>
+                                <span id="confidence-range">4031 - 4733 vph</span>
+                            </div>
                         </div>
                     </div>
                 </div>
