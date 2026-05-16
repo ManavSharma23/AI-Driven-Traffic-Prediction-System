@@ -62,9 +62,21 @@
             </form>
 
             <div id="result-container">
-                <p class="result-label">Predicted Traffic Volume</p>
+                <p class="result-label">AI Traffic Analysis</p>
                 <div class="prediction-number" id="prediction-number">0</div>
                 <p class="prediction-unit">vehicles per hour</p>
+                <div id="traffic-status" class="status-badge">Calculating...</div>
+                
+                <div id="insights-grid" class="insights-grid">
+                    <div class="insight-card">
+                        <span class="insight-label">Reasoning</span>
+                        <span id="insight-reason" class="insight-value">-</span>
+                    </div>
+                    <div class="insight-card">
+                        <span class="insight-label">Advice</span>
+                        <span id="insight-advice" class="insight-value">-</span>
+                    </div>
+                </div>
             </div>
         </main>
     </div>

@@ -40,7 +40,30 @@ document.getElementById('prediction-form').addEventListener('submit', async (e) 
         const data = await response.json();
 
         // Update UI with result
-        predictionNumber.textContent = Math.round(data.prediction).toLocaleString();
+        const volume = Math.round(data.prediction);
+        predictionNumber.textContent = volume.toLocaleString();
+        
+        // Traffic Status Logic
+        const statusBadge = document.getElementById('traffic-status');
+        statusBadge.className = 'status-badge'; // Reset
+        
+        if (volume < 2000) {
+            statusBadge.textContent = 'Light Traffic';
+            statusBadge.classList.add('status-light');
+        } else if (volume < 4500) {
+            statusBadge.textContent = 'Moderate Traffic';
+            statusBadge.classList.add('status-moderate');
+        } else {
+            statusBadge.textContent = 'Heavy Traffic';
+            statusBadge.classList.add('status-heavy');
+        }
+
+        // Update Insights
+        if (data.insights) {
+            document.getElementById('insight-reason').textContent = data.insights.reason;
+            document.getElementById('insight-advice').textContent = data.insights.recommendation + " for travel";
+        }
+        
         resultContainer.style.display = 'block';
         
         // Scroll to result smoothly

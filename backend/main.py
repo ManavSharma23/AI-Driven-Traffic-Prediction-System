@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 import pandas as pd
@@ -7,6 +8,15 @@ from datetime import datetime
 import os
 
 app = FastAPI(title="Traffic Prediction API")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Load models and encoders
 MODEL_PATH = "models/traffic_model.joblib"
@@ -74,11 +84,25 @@ def predict_traffic(data: TrafficInput):
         
         # Predict
         prediction = model.predict(features)[0]
+        volume = int(prediction)
+        
+        # Smart Insights Logic
+        recommendation = "Excellent" if volume < 1500 else "Good" if volume < 3500 else "Busy" if volume < 5000 else "Avoid"
+        reason = "Late night or off-peak hours" if hour < 6 or hour > 20 else "Standard traffic flow"
+        if is_rush_hour: reason = "Peak rush hour traffic"
+        if data.rain_1h > 2.0: reason += " + Heavy rain impact"
         
         return {
-            "prediction": round(float(prediction), 2),
+            "prediction": volume,
             "units": "vehicles per hour",
-            "timestamp": data.date_time
+            "timestamp": data.date_time,
+            "insights": {
+                "cars": int(volume * 0.75),
+                "trucks": int(volume * 0.20),
+                "motorcycles": int(volume * 0.05),
+                "recommendation": recommendation,
+                "reason": reason
+            }
         }
         
     except Exception as e:
