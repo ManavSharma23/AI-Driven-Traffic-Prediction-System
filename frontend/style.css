@@ -703,3 +703,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     50% { transform: translate(100px, 50px) scale(1.2); }
     100% { transform: translate(-50px, 100px) scale(0.9); }
 }
+
+/* Fix for empty forecast bars */
+.f-bar { 
+    width: 12px !important; 
+    background: linear-gradient(to top, var(--primary), var(--accent)) !important;
+    border-radius: 4px 4px 0 0;
+    opacity: 0.8;
+    box-shadow: 0 0 10px var(--primary-glow);
+}
+.f-bar-item { height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }

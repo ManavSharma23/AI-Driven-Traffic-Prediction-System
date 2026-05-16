@@ -403,6 +403,7 @@ function initEventTicker() {
 
 function initMiniForecast() {
     const container = document.getElementById('mini-forecast-bars');
+    container.innerHTML = ''; // Clear previous bars
     for (let i = 0; i < 6; i++) {
         const h = Math.random() * 80 + 20;
         const barItem = document.createElement('div');
