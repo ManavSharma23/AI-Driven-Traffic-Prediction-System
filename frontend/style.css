@@ -461,3 +461,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
     opacity: 0.6;
 }
+
+/* Remove default browser icons */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
