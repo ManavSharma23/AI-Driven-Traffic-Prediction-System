@@ -74,7 +74,3 @@ uvicorn main:app --reload
 - [ ] **Phase 4:** Live FastAPI Endpoint Integration for Real-world Telemetry.
 - [ ] **Phase 5:** Edge deployment for Smart City IOT sensors.
 
----
-
-**Developed by the TrafficFlow Infinity Core Team.**  
-*Empowering the cities of tomorrow with the intelligence of today.*
