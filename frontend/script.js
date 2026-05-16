@@ -269,10 +269,11 @@ function initAccuracyChart() {
                     label: 'Real Sensor Data',
                     data: actualData,
                     borderColor: '#10b981',
-                    borderWidth: 2,
-                    fill: false,
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true,
+                    borderWidth: 3,
                     pointRadius: 0,
-                    tension: 0.3
+                    tension: 0.4
                 },
                 {
                     label: 'AI Prediction',
@@ -282,7 +283,7 @@ function initAccuracyChart() {
                     borderWidth: 2,
                     fill: false,
                     pointRadius: 0,
-                    tension: 0.3
+                    tension: 0.4
                 }
             ]
         },

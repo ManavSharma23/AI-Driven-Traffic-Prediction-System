@@ -315,8 +315,24 @@
                         <h3>Ground Truth Validation</h3>
                         <p>Predicted Volume vs. Real-Time Sensor Data (Last 24h)</p>
                     </div>
-                    <div class="chart-container-large">
-                        <canvas id="accuracyTrendChart"></canvas>
+                    <div class="chart-flex-container">
+                        <div class="chart-main-area">
+                            <canvas id="accuracyTrendChart"></canvas>
+                        </div>
+                        <div class="chart-side-metrics">
+                            <div class="side-stat">
+                                <label>Peak Volume</label>
+                                <span>5,420 <small>vph</small></span>
+                            </div>
+                            <div class="side-stat">
+                                <label>Avg. Variance</label>
+                                <span class="success">± 4.2%</span>
+                            </div>
+                            <div class="side-stat">
+                                <label>Confidence</label>
+                                <span>98.8%</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
