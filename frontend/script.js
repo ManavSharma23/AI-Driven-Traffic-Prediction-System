@@ -343,3 +343,106 @@ showSection = (id) => {
         setTimeout(refreshAnalytics, 100);
     }
 };
+
+// --- Phase 4: Command Center Sentience ---
+function initCommandCenter() {
+    startLiveClock();
+    animateNetworkStats();
+    initEventTicker();
+    initMiniForecast();
+}
+
+function startLiveClock() {
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('live-time').textContent = now.toLocaleTimeString();
+    }, 1000);
+}
+
+function animateNetworkStats() {
+    const stats = [
+        { id: 'stat-active-roads', val: 214 },
+        { id: 'stat-congested', val: 31 },
+        { id: 'stat-avg-speed', val: 42 },
+        { id: 'stat-active-preds', val: 124 }
+    ];
+    stats.forEach(s => {
+        anime({
+            targets: `#${s.id}`,
+            innerHTML: [0, s.val],
+            round: 1,
+            easing: 'easeOutExpo',
+            duration: 2000
+        });
+    });
+}
+
+function initEventTicker() {
+    const ticker = document.getElementById('ai-event-ticker');
+    const events = [
+        "Highway A: Congestion spike detected near Downtown.",
+        "Rain sensor active: Slowdown predicted for 16:00 peak.",
+        "Neural node MSP-CENTRAL: System health 99.8%.",
+        "Predicted peak in 18 mins: Commuter alert generated.",
+        "Model Drift detected: Self-calibration in progress...",
+        "Route Planner node: Active session count increased."
+    ];
+    
+    let idx = 0;
+    setInterval(() => {
+        const item = document.createElement('div');
+        item.className = 'ticker-item';
+        item.textContent = `[${new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'})}] ${events[idx]}`;
+        ticker.prepend(item);
+        if (ticker.childNodes.length > 5) ticker.lastChild.remove();
+        idx = (idx + 1) % events.length;
+        lucide.createIcons();
+    }, 4000);
+}
+
+function initMiniForecast() {
+    const container = document.getElementById('mini-forecast-bars');
+    for (let i = 0; i < 6; i++) {
+        const h = Math.random() * 80 + 20;
+        const barItem = document.createElement('div');
+        barItem.className = 'f-bar-item';
+        barItem.innerHTML = `
+            <div class="f-bar" style="height: ${h}%"></div>
+            <span class="f-label">+${(i+1)*10}m</span>
+        `;
+        container.appendChild(barItem);
+    }
+}
+
+async function runCommandCenterSim() {
+    const time = document.getElementById('cmd-time').value;
+    const weather = document.getElementById('cmd-weather').value;
+    const resultBox = document.getElementById('sim-result-compact');
+    
+    resultBox.classList.remove('hidden');
+    document.getElementById('cmd-res-vol').textContent = "---";
+    
+    // Simulate Neural "Thinking" delay
+    setTimeout(async () => {
+        const vol = Math.floor(Math.random() * 4500) + 500;
+        anime({
+            targets: '#cmd-res-vol',
+            innerHTML: [0, vol],
+            round: 1,
+            duration: 1000,
+            easing: 'easeOutExpo'
+        });
+        document.getElementById('cmd-res-status').textContent = vol > 3500 ? 'CONGESTED' : 'STABLE';
+        document.getElementById('cmd-res-status').style.color = vol > 3500 ? 'var(--danger)' : 'var(--success)';
+    }, 800);
+}
+
+// Hook into section switching to start the sentient systems
+const prevShowSectionCC = showSection;
+showSection = (id) => {
+    prevShowSectionCC(id);
+    if (id === 'live-map') {
+        initCommandCenter();
+        setTimeout(() => map.invalidateSize(), 300);
+    }
+};

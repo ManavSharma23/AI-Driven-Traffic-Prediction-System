@@ -89,19 +89,95 @@
             </div>
         </section>
 
-        <!-- 2. Live Network Map -->
+        <!-- 2. City Traffic Command Center -->
         <section id="live-map" class="spa-section">
-            <div class="section-header-centered">
-                <h2>Network Command Center</h2>
-                <p>Live highway segments with precision congestion overlays</p>
+            <div class="command-header">
+                <div class="command-title-group">
+                    <h1>CITY COMMAND CENTER <span class="heartbeat">● LIVE</span></h1>
+                    <p>AI Neural Infrastructure v4.2.0 | Node: MSP-CENTRAL</p>
+                </div>
+                <div class="command-sensors">
+                    <div class="sensor-chip"><i data-lucide="cloud-sun"></i> 288 K</div>
+                    <div class="sensor-chip"><i data-lucide="clock"></i> <span id="live-time">12:00:00</span></div>
+                </div>
             </div>
-            <div class="map-wrapper">
-                <div id="map-container" class="enterprise-map"></div>
-                <div class="map-legend">
-                    <div class="legend-title">Congestion Key</div>
-                    <div class="legend-row"><span class="key light"></span><span>< 2,000 vph</span></div>
-                    <div class="legend-row"><span class="key moderate"></span><span>2,000 - 4,500 vph</span></div>
-                    <div class="legend-row"><span class="key heavy"></span><span>> 4,500 vph</span></div>
+
+            <div class="command-grid">
+                <!-- Side Panel: Stats -->
+                <div class="command-sidebar">
+                    <div class="glass-card mini-stat-panel">
+                        <h3>NETWORK STATUS</h3>
+                        <div class="mini-stat-item">
+                            <label>Active Roads</label>
+                            <span class="count-up" id="stat-active-roads">0</span>
+                        </div>
+                        <div class="mini-stat-item">
+                            <label>Congested Segments</label>
+                            <span class="count-up danger" id="stat-congested">0</span>
+                        </div>
+                        <div class="mini-stat-item">
+                            <label>Average Speed</label>
+                            <span class="count-up success" id="stat-avg-speed">0</span> <small>km/h</small>
+                        </div>
+                        <div class="mini-stat-item">
+                            <label>Active Predictions</label>
+                            <span class="count-up" id="stat-active-preds">0</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card events-panel">
+                        <h3>SENTIENT LOGS</h3>
+                        <div id="ai-event-ticker" class="ticker-list">
+                            <!-- Events inject here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center: The Map -->
+                <div class="command-center-map">
+                    <div id="map-container" class="infrastructure-map"></div>
+                    <div class="map-overlay-legend">
+                        <div class="legend-dot green"></div> <span>Smooth</span>
+                        <div class="legend-dot amber"></div> <span>Medium</span>
+                        <div class="legend-dot red"></div> <span>Congested</span>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Forecasting & Inputs -->
+                <div class="command-prediction-panel">
+                    <div class="glass-card simulator-box">
+                        <h3>NEURAL SIMULATOR</h3>
+                        <div class="sim-form-compact">
+                            <div class="sim-row">
+                                <label>Time</label>
+                                <input type="time" id="cmd-time" value="08:00">
+                            </div>
+                            <div class="sim-row">
+                                <label>Weather</label>
+                                <select id="cmd-weather">
+                                    <option value="Clear">Clear</option>
+                                    <option value="Rain">Rain</option>
+                                    <option value="Snow">Snow</option>
+                                </select>
+                            </div>
+                            <button onclick="runCommandCenterSim()" class="command-btn">GENERATE PREDICTION</button>
+                        </div>
+                        
+                        <div id="sim-result-compact" class="sim-result-compact hidden">
+                            <div class="res-vph"><span id="cmd-res-vol">0</span> <small>vph</small></div>
+                            <div class="res-meta">
+                                <span id="cmd-res-status">STABLE</span>
+                                <span id="cmd-res-conf">CONF: 92%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card forecast-mini-box">
+                        <h3>60-MIN FORECAST</h3>
+                        <div class="forecast-bars" id="mini-forecast-bars">
+                            <!-- Bars here -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
