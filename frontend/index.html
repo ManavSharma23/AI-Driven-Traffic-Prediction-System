@@ -497,53 +497,100 @@
                 </div>
             </div>
      <!-- 4. MAE Breakdown -->
-                <div class="glass-card mae-box">
-                    <h3>MAE Scenario Breakdown</h3>
-                    <div class="bar-list">
-                        <div class="bar-item">
-                            <label>Peak AM (07:00-09:00)</label>
-                            <div class="bar-outer"><div class="bar-inner" style="width: 85%"></div></div>
-                            <span>185 vph</span>
-                        </div>
-                        <div class="bar-item">
-                            <label>Peak PM (16:00-18:00)</label>
-                            <div class="bar-outer"><div class="bar-inner" style="width: 92%"></div></div>
-                            <span>210 vph</span>
-                        </div>
-                        <div class="bar-item">
-                            <label>Midday Flow</label>
-                            <div class="bar-outer"><div class="bar-inner" style="width: 40%"></div></div>
-                            <span>88 vph</span>
-                        </div>
-                        <div class="bar-item">
-                            <label>Night/Off-Peak</label>
-                            <div class="bar-outer"><div class="bar-inner" style="width: 15%"></div></div>
-                            <span>42 vph</span>
-                        </div>
+                <!-- MAE Scenario Breakdown (Master Upgrade) -->
+                <div class="glass-card mae-telemetry-card">
+                    <div class="mae-header">
+                        <h3>MAE SCENARIO BREAKDOWN</h3>
+                        <p>Mean Absolute Error by traffic period (vph)</p>
                     </div>
-                </div>
+                    
+                    <div class="mae-bar-stack">
+                        <div class="mae-row">
+                            <div class="mae-label">PEAK AM (07:00 - 09:00)</div>
+                            <div class="mae-bar-container">
+                                <div class="mae-fill purple" style="width: 82%"></div>
+                                <span class="mae-val">142</span>
+                            </div>
+                        </div>
 
-                <!-- 5. Model Leaderboard -->
-                <div class="glass-card leaderboard-box">
-                    <h3>Model Leaderboard</h3>
-                    <div class="leaderboard-list">
-                        <div class="lb-item best">
-                            <span class="rank">1</span>
-                            <div class="model-info"><strong>XGBoost Regressor</strong><span>Ensemble Gradient Boosting</span></div>
-                            <span class="score">0.98 R²</span>
+                        <div class="mae-row">
+                            <div class="mae-label">PEAK PM (16:00 - 18:00)</div>
+                            <div class="mae-bar-container">
+                                <div class="mae-fill red" style="width: 91%"></div>
+                                <span class="mae-val">168</span>
+                            </div>
                         </div>
-                        <div class="lb-item">
-                            <span class="rank">2</span>
-                            <div class="model-info"><strong>Random Forest</strong><span>Bagging Decision Trees</span></div>
-                            <span class="score">0.95 R²</span>
+
+                        <div class="mae-row">
+                            <div class="mae-label">MIDDAY ARTERIAL</div>
+                            <div class="mae-bar-container">
+                                <div class="mae-fill blue" style="width: 45%"></div>
+                                <span class="mae-val">84</span>
+                            </div>
                         </div>
-                        <div class="lb-item">
-                            <span class="rank">3</span>
-                            <div class="model-info"><strong>Linear Regression</strong><span>Statistical Baseline</span></div>
-                            <span class="score">0.82 R²</span>
+
+                        <div class="mae-row">
+                            <div class="mae-label">WEEKEND FLOW</div>
+                            <div class="mae-bar-container">
+                                <div class="mae-fill green" style="width: 32%"></div>
+                                <span class="mae-val">62</span>
+                            </div>
+                        </div>
+
+                        <div class="mae-row">
+                            <div class="mae-label">NIGHT / OFF-PEAK</div>
+                            <div class="mae-bar-container">
+                                <div class="mae-fill grey" style="width: 20%"></div>
+                                <span class="mae-val">38</span>
+                            </div>
+                        </div>
+                    </div>
+                <                <!-- Model Leaderboard (Master Upgrade) -->
+                <div class="glass-card leaderboard-telemetry-card">
+                    <div class="leader-header">
+                        <i data-lucide="award"></i>
+                        <h3>NEURAL LEADERBOARD</h3>
+                    </div>
+                    
+                    <div class="leaderboard-stack">
+                        <div class="lb-rank-card rank-1">
+                            <div class="rank-node">01</div>
+                            <div class="model-meta">
+                                <strong>XGBoost Regressor</strong>
+                                <p>Ensemble Gradient Boosting Core</p>
+                            </div>
+                            <div class="model-accuracy">
+                                <label>ACCURACY</label>
+                                <span>0.984 R²</span>
+                            </div>
+                        </div>
+
+                        <div class="lb-rank-card">
+                            <div class="rank-node">02</div>
+                            <div class="model-meta">
+                                <strong>Random Forest</strong>
+                                <p>Bagging Decision Neural Network</p>
+                            </div>
+                            <div class="model-accuracy">
+                                <label>ACCURACY</label>
+                                <span>0.952 R²</span>
+                            </div>
+                        </div>
+
+                        <div class="lb-rank-card">
+                            <div class="rank-node">03</div>
+                            <div class="model-meta">
+                                <strong>LSTM Neural Core</strong>
+                                <p>Long Short-Term Memory Cell</p>
+                            </div>
+                            <div class="model-accuracy">
+                                <label>ACCURACY</label>
+                                <span>0.910 R²</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+   </div>
 
                 <!-- 6. Prediction Log -->
                 <div class="glass-card full-width log-box">

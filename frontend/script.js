@@ -234,6 +234,10 @@ function initAccuracyChart() {
     const actualData = Array.from({length: 24}, () => Math.floor(Math.random() * 5000) + 500);
     const predictedData = actualData.map(v => v + (Math.random() * 400 - 200));
 
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+    gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
     accuracyChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -243,17 +247,17 @@ function initAccuracyChart() {
                     label: 'Real Sensor Data',
                     data: actualData,
                     borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    backgroundColor: gradient,
                     fill: true,
-                    borderWidth: 3,
+                    borderWidth: 4,
                     pointRadius: 0,
                     tension: 0.4
                 },
                 {
-                    label: 'AI Prediction',
+                    label: 'AI Neural Prediction',
                     data: predictedData,
                     borderColor: '#6366f1',
-                    borderDash: [5, 5],
+                    borderDash: [8, 4],
                     borderWidth: 2,
                     fill: false,
                     pointRadius: 0,
@@ -264,10 +268,15 @@ function initAccuracyChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'top', labels: { color: '#94a3b8', font: { weight: '600' } } } },
+            plugins: { 
+                legend: { 
+                    position: 'top', 
+                    labels: { color: '#94a3b8', boxWidth: 12, padding: 20, font: { weight: '800', size: 11 } } 
+                } 
+            },
             scales: {
-                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b', font: { weight: '700' } } },
+                x: { grid: { display: false }, ticks: { color: '#64748b', font: { weight: '700' } } }
             }
         }
     });
