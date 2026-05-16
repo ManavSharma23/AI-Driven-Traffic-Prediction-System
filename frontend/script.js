@@ -349,7 +349,6 @@ showSection = (id) => {
 function initCommandCenter() {
     startLiveClock();
     animateNetworkStats();
-    initEventTicker();
     initMiniForecast();
 }
 
@@ -378,28 +377,6 @@ function animateNetworkStats() {
     });
 }
 
-function initEventTicker() {
-    const ticker = document.getElementById('ai-event-ticker');
-    const events = [
-        "Highway A: Congestion spike detected near Downtown.",
-        "Rain sensor active: Slowdown predicted for 16:00 peak.",
-        "Neural node MSP-CENTRAL: System health 99.8%.",
-        "Predicted peak in 18 mins: Commuter alert generated.",
-        "Model Drift detected: Self-calibration in progress...",
-        "Route Planner node: Active session count increased."
-    ];
-    
-    let idx = 0;
-    setInterval(() => {
-        const item = document.createElement('div');
-        item.className = 'ticker-item';
-        item.textContent = `[${new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'})}] ${events[idx]}`;
-        ticker.prepend(item);
-        if (ticker.childNodes.length > 5) ticker.lastChild.remove();
-        idx = (idx + 1) % events.length;
-        lucide.createIcons();
-    }, 4000);
-}
 
 function initMiniForecast() {
     const container = document.getElementById('mini-forecast-bars');

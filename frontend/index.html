@@ -96,147 +96,93 @@
             </div>
         </section>
 
-        <!-- 2. City Traffic Command Center (Reference Blueprint Edition) -->
+        <!-- 2. City Traffic Command Center -->
         <section id="live-map" class="spa-section">
-            <div class="command-grid-full">
-                
-                <!-- Left Sidebar: Command & Key -->
-                <div class="command-left-sidebar">
-                    <div class="glass-card side-panel-box">
-                        <div class="panel-header">
-                            <h2>Network Command Center</h2>
-                            <p>Live highway segments with precision congestion overlays</p>
-                        </div>
-                        <div class="congestion-key">
-                            <h4>Congestion Key</h4>
-                            <div class="key-item"><span class="dot green"></span> < 2,000 vph <small>Smooth Flow</small></div>
-                            <div class="key-item"><span class="dot amber"></span> 2,000 - 4,500 vph <small>Moderate</small></div>
-                            <div class="key-item"><span class="dot red"></span> > 4,500 vph <small>Heavy Congestion</small></div>
-                        </div>
-                    </div>
+            <div class="command-header">
+                <div class="command-title-group">
+                    <h1>CITY COMMAND CENTER <span class="heartbeat">● LIVE</span></h1>
+                    <p>AI Neural Infrastructure v4.2.0 | Node: MSP-CENTRAL</p>
+                </div>
+                <div class="command-sensors">
+                    <div class="sensor-chip"><i data-lucide="cloud-sun"></i> 288 K</div>
+                    <div class="sensor-chip"><i data-lucide="clock"></i> <span id="live-time">12:00:00</span></div>
+                </div>
+            </div>
 
-                    <div class="glass-card side-panel-box">
-                        <h4>Live System Status</h4>
-                        <div class="status-list">
-                            <div class="status-row"><span class="dot-small green"></span> All Systems Operational</div>
-                            <div class="status-row"><label>AI Model</label> <span>v2.4.0</span></div>
-                            <div class="status-row"><label>Data Feeds</label> <span class="success">Live</span></div>
-                            <div class="status-row"><label>Sensors Online</label> <span>1,248</span></div>
-                            <div class="status-row"><label>Last Updated</label> <span>10:42:11 AM</span></div>
+            <div class="command-grid">
+                <!-- Side Panel: Stats -->
+                <div class="command-sidebar">
+                    <div class="glass-card mini-stat-panel" style="height: 100%;">
+                        <h3>NETWORK STATUS</h3>
+                        <div class="mini-stat-item">
+                            <label>Active Roads</label>
+                            <span class="count-up" id="stat-active-roads">0</span>
                         </div>
-                    </div>
-
-                    <div class="glass-card side-panel-box">
-                        <h4>Quick Actions</h4>
-                        <div class="action-buttons">
-                            <button class="action-btn primary"><i data-lucide="zap"></i> Run Prediction</button>
-                            <button class="action-btn"><i data-lucide="bar-chart-2"></i> View Analytics</button>
-                            <button class="action-btn"><i data-lucide="map-pin"></i> Optimize Routes</button>
+                        <div class="mini-stat-item">
+                            <label>Congested Segments</label>
+                            <span class="count-up danger" id="stat-congested">0</span>
+                        </div>
+                        <div class="mini-stat-item">
+                            <label>Average Speed</label>
+                            <span class="count-up success" id="stat-avg-speed">0</span> <small>km/h</small>
+                        </div>
+                        <div class="mini-stat-item">
+                            <label>Active Predictions</label>
+                            <span class="count-up" id="stat-active-preds">0</span>
+                        </div>
+                        <div class="mini-stat-item" style="border: none;">
+                            <label>System Health</label>
+                            <span class="count-up">99.8%</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Center: Map + Bottom Insight Row -->
-                <div class="command-center-stack">
-                    <div class="glass-card map-main-box">
-                        <div class="map-header">
-                            <h3><i data-lucide="map"></i> Live Network Map <span class="badge-live">LIVE</span></h3>
-                        </div>
-                        <div id="map-container" class="blueprint-map"></div>
-                        <div class="map-internal-legend">
-                            <span class="key-item"><span class="dot green"></span> < 2,000 vph</span>
-                            <span class="key-item"><span class="dot amber"></span> 2,000 - 4,500 vph</span>
-                            <span class="key-item"><span class="dot red"></span> > 4,500 vph</span>
-                        </div>
-                    </div>
-
-                    <div class="command-bottom-row">
-                        <div class="glass-card trends-box">
-                            <div class="card-header">
-                                <h4>Traffic Flow Trends</h4>
-                                <select class="small-select"><option>Last 24 Hours</option></select>
-                            </div>
-                            <div class="mini-chart-container">
-                                <canvas id="miniTrendChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="glass-card pred-outlook-box">
-                            <div class="card-header">
-                                <h4><i data-lucide="brain"></i> AI Prediction <small>(Next 30 min)</small></h4>
-                            </div>
-                            <div class="pred-summary">
-                                <div class="pred-val">4,120 <small>vph</small></div>
-                                <div class="pred-bar-outer"><div class="pred-bar-inner" style="width: 87%"></div></div>
-                                <div class="pred-meta">Confidence <span>87%</span></div>
-                            </div>
-                            <button class="ghost-btn">View Full Prediction &rarr;</button>
-                        </div>
+                <!-- Center: The Map -->
+                <div class="command-center-map">
+                    <div id="map-container" class="infrastructure-map"></div>
+                    <div class="map-overlay-legend">
+                        <div class="legend-dot green"></div> <span>Smooth</span>
+                        <div class="legend-dot amber"></div> <span>Medium</span>
+                        <div class="legend-dot red"></div> <span>Congested</span>
                     </div>
                 </div>
 
-                <!-- Right Sidebar: Overview & Incidents -->
-                <div class="command-right-sidebar">
-                    <div class="glass-card side-panel-box">
-                        <h4>Live Traffic Overview</h4>
-                        <p class="panel-subtitle">Real-time citywide metrics</p>
-                        <div class="overview-grid">
-                            <div class="ov-tile">
-                                <label>Avg Speed</label>
-                                <div class="ov-val">42 <small>km/h</small></div>
+                <!-- Right Panel: Forecasting & Inputs -->
+                <div class="command-prediction-panel">
+                    <div class="glass-card simulator-box">
+                        <h3>NEURAL SIMULATOR</h3>
+                        <div class="sim-form-compact">
+                            <div class="sim-row">
+                                <label>Time</label>
+                                <input type="time" id="cmd-time" value="08:00">
                             </div>
-                            <div class="ov-tile">
-                                <label>Total Flow</label>
-                                <div class="ov-val">3,852 <small>vph</small></div>
+                            <div class="sim-row">
+                                <label>Weather</label>
+                                <select id="cmd-weather">
+                                    <option value="Clear">Clear</option>
+                                    <option value="Rain">Rain</option>
+                                    <option value="Snow">Snow</option>
+                                </select>
                             </div>
-                            <div class="ov-tile">
-                                <label>Congestion</label>
-                                <div class="ov-val danger">High <small>72%</small></div>
-                            </div>
-                            <div class="ov-tile">
-                                <label>Incidents</label>
-                                <div class="ov-val warning">7 <small>Active</small></div>
+                            <button onclick="runCommandCenterSim()" class="command-btn">GENERATE PREDICTION</button>
+                        </div>
+                        
+                        <div id="sim-result-compact" class="sim-result-compact hidden">
+                            <div class="res-vph"><span id="cmd-res-vol">0</span> <small>vph</small></div>
+                            <div class="res-meta">
+                                <span id="cmd-res-status">STABLE</span>
+                                <span id="cmd-res-conf">CONF: 92%</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="glass-card side-panel-box">
-                        <div class="card-header">
-                            <h4>Active Incidents</h4>
-                            <span class="danger-count">7 Active</span>
+                    <div class="glass-card forecast-mini-box">
+                        <h3>60-MIN FORECAST</h3>
+                        <div class="forecast-bars" id="mini-forecast-bars">
+                            <!-- Bars here -->
                         </div>
-                        <div class="incident-list">
-                            <div class="incident-item">
-                                <i data-lucide="alert-triangle" class="warning"></i>
-                                <div class="inc-info"><strong>I-75 Northbound</strong><span>Heavy Collision</span></div>
-                                <span class="inc-time">2 min ago</span>
-                            </div>
-                            <div class="incident-item">
-                                <i data-lucide="construction" class="amber"></i>
-                                <div class="inc-info"><strong>Downtown Connector</strong><span>Roadwork</span></div>
-                                <span class="inc-time">15 min ago</span>
-                            </div>
-                        </div>
-                        <button class="ghost-btn full">View All Incidents &rarr;</button>
-                    </div>
-
-                    <div class="glass-card side-panel-box">
-                        <h4>Top Congested Segments</h4>
-                        <div class="segment-list">
-                            <div class="seg-item">
-                                <span class="num">1</span>
-                                <span class="name">I-75 Northbound</span>
-                                <span class="val">5,890 <small>vph</small></span>
-                            </div>
-                            <div class="seg-item">
-                                <span class="num">2</span>
-                                <span class="name">Downtown Connector</span>
-                                <span class="val">4,750 <small>vph</small></span>
-                            </div>
-                        </div>
-                        <button class="ghost-btn full">View All Segments &rarr;</button>
                     </div>
                 </div>
-
             </div>
         </section>
 
