@@ -1039,3 +1039,25 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.7; transform: scale(1.1); }
 }
+
+/* --- Phase 11: Temporal Intensity Map Overhaul --- */
+.intensity-map-card { padding: 3rem; }
+.intensity-header { margin-bottom: 3rem; }
+.intensity-header h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+.intensity-header p { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
+
+.pill-grid { 
+    display: grid; grid-template-columns: repeat(24, 1fr); 
+    gap: 8px; margin-bottom: 2rem; 
+}
+.heat-pill { 
+    width: 10px; height: 40px; border-radius: 10px; 
+    transition: 0.3s; cursor: crosshair;
+}
+.heat-pill:hover { transform: scaleY(1.2); filter: brightness(1.2); }
+
+.intensity-legend { 
+    display: flex; flex-direction: column; gap: 8px; 
+    font-size: 0.8rem; font-weight: 800; color: white; 
+    margin-top: 1rem;
+}

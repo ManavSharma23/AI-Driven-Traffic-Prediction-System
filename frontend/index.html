@@ -480,20 +480,23 @@
                 </div>
 
                 <!-- 3. Congestion Heatmap -->
-                <div class="glass-card heatmap-box">
-                    <div class="card-header">
-                        <h3>Temporal Intensity Map</h3>
-                        <p>Congestion density by Day and Hour</p>
-                    </div>
-                    <div id="neural-heatmap" class="heatmap-grid"></div>
-                    <div class="heatmap-legend">
-                        <span>Low</span>
-                        <div class="legend-scale"></div>
-                        <span>Peak</span>
-                    </div>
+                <!-- Temporal Intensity Map (Mockup Accurate) -->
+            <div class="glass-card intensity-map-card">
+                <div class="intensity-header">
+                    <h3>Temporal Intensity Map</h3>
+                    <p>Congestion density by Day and Hour</p>
+                </div>
+                
+                <div id="neural-heatmap" class="pill-grid">
+                    <!-- Pill cells injected via JS -->
                 </div>
 
-                <!-- 4. MAE Breakdown -->
+                <div class="intensity-legend">
+                    <span>Low</span>
+                    <span>Peak</span>
+                </div>
+            </div>
+     <!-- 4. MAE Breakdown -->
                 <div class="glass-card mae-box">
                     <h3>MAE Scenario Breakdown</h3>
                     <div class="bar-list">

@@ -301,15 +301,22 @@ function initAccuracyChart() {
 
 function initNeuralHeatmap() {
     const grid = document.getElementById('neural-heatmap');
+    if (!grid) return;
     grid.innerHTML = '';
-    for (let i = 0; i < 24 * 7; i++) {
-        const cell = document.createElement('div');
-        cell.className = 'heat-cell';
+    // 7 days x 24 hours = 168 pills
+    for (let i = 0; i < 168; i++) {
+        const pill = document.createElement('div');
+        pill.className = 'heat-pill';
         const intensity = Math.random();
-        const color = intensity > 0.8 ? '#ef4444' : intensity > 0.4 ? '#f59e0b' : '#10b981';
-        cell.style.background = color;
-        cell.style.opacity = intensity * 0.8 + 0.2;
-        grid.appendChild(cell);
+        
+        // Mockup accurate tri-color logic
+        let color = '#10b981'; // Green (Low)
+        if (intensity > 0.75) color = '#ef4444'; // Red (Peak)
+        else if (intensity > 0.4) color = '#f59e0b'; // Amber (Medium)
+        else if (intensity < 0.15) color = 'rgba(255,255,255,0.05)'; // Empty/Dark
+        
+        pill.style.background = color;
+        grid.appendChild(pill);
     }
 }
 
