@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrafficFlow AI | Smart Predictions</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TrafficFlow AI</h1>
+            <p class="subtitle">Next-generation traffic volume prediction powered by Machine Learning</p>
+        </header>
+
+        <main class="dashboard-card">
+            <form id="prediction-form">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="date_time">Date & Time</label>
+                        <input type="datetime-local" id="date_time" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="temp">Temperature (K)</label>
+                        <input type="number" id="temp" step="0.01" value="288.15" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="rain_1h">Rain Intensity (mm)</label>
+                        <input type="number" id="rain_1h" step="0.01" value="0.00" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="snow_1h">Snow Intensity (mm)</label>
+                        <input type="number" id="snow_1h" step="0.01" value="0.00" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="clouds_all">Cloud Coverage (%)</label>
+                        <input type="number" id="clouds_all" min="0" max="100" value="40" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="weather_main">Current Weather</label>
+                        <select id="weather_main" required>
+                            <option value="Clear">Clear Skies</option>
+                            <option value="Clouds">Cloudy</option>
+                            <option value="Rain">Rainy</option>
+                            <option value="Drizzle">Drizzle</option>
+                            <option value="Thunderstorm">Stormy</option>
+                            <option value="Snow">Snowy</option>
+                            <option value="Mist">Misty</option>
+                            <option value="Fog">Foggy</option>
+                            <option value="Haze">Hazy</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="predict-btn" id="submit-btn">
+                    <span id="btn-text">Generate Prediction</span>
+                    <div class="loader" id="loader"></div>
+                </button>
+            </form>
+
+            <div id="result-container">
+                <p class="result-label">Predicted Traffic Volume</p>
+                <div class="prediction-number" id="prediction-number">0</div>
+                <p class="prediction-unit">vehicles per hour</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
