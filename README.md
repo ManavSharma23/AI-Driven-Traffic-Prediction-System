@@ -57,13 +57,22 @@ cd AI-Driven-Traffic-Prediction-System
 ```
 
 ### 2. Launch the Interface
-Simply serve the `frontend/index.html` via any modern web server or open it directly in a high-performance browser.
-
-### 3. Initialize the Backend (Planned)
+We recommend running a local web server to avoid CORS issues with the backend API:
 ```bash
-pip install -r requirements.txt
+cd frontend
+python -m http.server 3000
+```
+Then open `http://127.0.0.1:3000` in a modern, high-performance browser.
+
+### 3. Initialize the Backend API
+The neural simulation engine requires the FastAPI backend to be running:
+```bash
+# Open a new terminal tab
+cd backend
+pip install -r ../requirements.txt
 uvicorn main:app --reload
 ```
+The backend will boot up on `http://127.0.0.1:8000`.
 
 ---
 
