@@ -1,6 +1,7 @@
 let forecastChart = null;
 let currentForecast = [];
 let map = null;
+let mapTileLayer = null;
 
 // --- Initialize Components ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -54,7 +55,11 @@ function showSection(id) {
 function initMap() {
     if (map) return;
     map = L.map('map-container').setView([44.9778, -93.2650], 12);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+    const isLight = document.body.classList.contains('light-theme');
+    const tileUrl = isLight 
+        ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+        : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    mapTileLayer = L.tileLayer(tileUrl).addTo(map);
 
     const highwayStyles = [
         { name: "I-94 East", coords: [[44.95, -93.35], [44.98, -93.15]], vol: 5240 },
@@ -72,8 +77,34 @@ function initMap() {
 }
 
 function initTheme() {
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-        document.body.classList.toggle('light-theme');
+    const themeBtn = document.getElementById('theme-toggle');
+    if (!themeBtn) return;
+    
+    // Load preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        const icon = themeBtn.querySelector('i');
+        if (icon) icon.setAttribute('data-lucide', 'sun');
+    }
+    
+    themeBtn.addEventListener('click', () => {
+        const isLight = document.body.classList.toggle('light-theme');
+        const icon = themeBtn.querySelector('i');
+        if (icon) {
+            icon.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
+        }
+        lucide.createIcons();
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        
+        // Toggle Leaflet map basemap layer if map is active
+        if (map && mapTileLayer) {
+            map.removeLayer(mapTileLayer);
+            const tileUrl = isLight 
+                ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+                : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+            mapTileLayer = L.tileLayer(tileUrl).addTo(map);
+        }
     });
 }
 
@@ -227,7 +258,37 @@ function exportCSV() {
     a.href = url; a.download = 'traffic_forecast.csv'; a.click();
 }
 
-document.querySelector('#planner .enterprise-btn').addEventListener('click', calculateRoutes);
+function exportAuditLog() {
+    const table = document.querySelector('.audit-table');
+    if (!table) return alert('No audit log found.');
+    
+    let csv = [];
+    const rows = table.querySelectorAll('tr');
+    
+    for (let i = 0; i < rows.length; i++) {
+        const row = [];
+        const cols = rows[i].querySelectorAll('td, th');
+        
+        for (let j = 0; j < cols.length; j++) {
+            let text = cols[j].innerText.trim();
+            text = text.replace(/"/g, '""');
+            row.push(`"${text}"`);
+        }
+        
+        csv.push(row.join(','));
+    }
+    
+    const csvContent = csv.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'traffic_prediction_audit_log.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 
 // --- Analytics Phase 3: Observatory Logic ---
 let accuracyChart = null;

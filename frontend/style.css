@@ -1181,3 +1181,243 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .export-btn-premium, .btn-icon {
     margin-left: auto; /* Force to right if in a flex container */
 }
+
+/* --- Sentient Light Theme Override System --- */
+body.light-theme {
+    --bg: #f8fafc;
+    --card: rgba(255, 255, 255, 0.75);
+    --border: rgba(99, 102, 241, 0.15);
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --primary-glow: rgba(99, 102, 241, 0.15);
+}
+
+body.light-theme .global-bg {
+    background: radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.06) 0%, transparent 40%);
+}
+
+body.light-theme .navbar {
+    background: rgba(248, 250, 252, 0.85);
+    border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+body.light-theme .logo-text .brand {
+    color: #0f172a;
+}
+
+body.light-theme .nav-item {
+    color: #64748b;
+}
+
+body.light-theme .nav-item:hover {
+    color: #0f172a;
+    background: rgba(99, 102, 241, 0.05);
+}
+
+body.light-theme .nav-item.active {
+    color: var(--primary);
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.15);
+}
+
+body.light-theme .theme-btn-round {
+    color: #0f172a;
+    border-color: rgba(99, 102, 241, 0.15);
+}
+
+body.light-theme .theme-btn-round:hover {
+    background: rgba(99, 102, 241, 0.05);
+    border-color: var(--primary);
+}
+
+body.light-theme .hero-content h1 {
+    color: #0f172a;
+}
+
+body.light-theme .btn-secondary {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: #0f172a;
+}
+
+body.light-theme .btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .floating-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(99, 102, 241, 0.15);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .f-val {
+    color: #0f172a;
+}
+
+body.light-theme .stats-ribbon {
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+}
+
+body.light-theme .mock-feature-card {
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+}
+
+body.light-theme .mock-feature-card:hover {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.08);
+}
+
+body.light-theme .learn-more {
+    color: var(--primary);
+}
+
+body.light-theme input[type="date"],
+body.light-theme input[type="time"],
+body.light-theme input[type="datetime-local"] {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(99, 102, 241, 0.2);
+    color: #0f172a;
+}
+
+body.light-theme input[type="date"]:focus,
+body.light-theme input[type="time"]:focus,
+body.light-theme input[type="datetime-local"]:focus {
+    background: #ffffff;
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+body.light-theme .module-input-wrapper {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(99, 102, 241, 0.15);
+}
+
+body.light-theme .module-input-wrapper input {
+    color: #0f172a;
+}
+
+body.light-theme .module-input-wrapper:focus-within {
+    background: #ffffff;
+    border-color: var(--primary);
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.15);
+}
+
+body.light-theme .diag-title,
+body.light-theme .diag-content h4,
+body.light-theme .diag-header-main h3,
+body.light-theme .telemetry-data span,
+body.light-theme .mae-val,
+body.light-theme .leader-header h3,
+body.light-theme .model-meta strong,
+body.light-theme .model-accuracy span {
+    color: #0f172a;
+}
+
+body.light-theme .diagnostics-card-telemetry {
+    background: rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+}
+
+body.light-theme .audit-table td {
+    color: #334155;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+body.light-theme .audit-table tr:hover td {
+    background: rgba(99, 102, 241, 0.08);
+    color: #0f172a;
+}
+
+body.light-theme .action-btn {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(99, 102, 241, 0.15);
+    color: #0f172a;
+}
+
+body.light-theme .action-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: var(--primary);
+}
+
+body.light-theme .action-btn.primary {
+    background: var(--primary);
+    color: white;
+}
+
+body.light-theme .map-overlay-legend,
+body.light-theme .map-internal-legend {
+    background: rgba(255, 255, 255, 0.9);
+    color: #0f172a;
+    border-color: rgba(99, 102, 241, 0.15);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .status-row {
+    border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+body.light-theme .ov-tile {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(99, 102, 241, 0.1);
+}
+
+body.light-theme .ov-val {
+    color: #0f172a;
+}
+
+body.light-theme .btn-icon {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(99, 102, 241, 0.15);
+    color: #475569;
+}
+
+body.light-theme .btn-icon:hover {
+    background: var(--primary);
+    color: white;
+}
+
+body.light-theme .weather-chip {
+    background: rgba(255, 255, 255, 0.8);
+    color: #475569;
+}
+
+body.light-theme .weather-chip.active {
+    background: var(--primary);
+    color: white;
+}
+
+body.light-theme .lb-rank-card {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(99, 102, 241, 0.1);
+}
+
+body.light-theme .lb-rank-card.rank-1 {
+    background: rgba(99, 102, 241, 0.05);
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+body.light-theme .rank-node {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(99, 102, 241, 0.15);
+}
+
+body.light-theme .rank-1 .rank-node {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+body.light-theme .step-card {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+body.light-theme .step-card h4 {
+    color: #0f172a;
+}
+
+body.light-theme .intensity-legend {
+    color: #0f172a;
+}
+
