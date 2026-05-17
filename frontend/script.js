@@ -5,17 +5,21 @@ let mapTileLayer = null;
 
 // --- Initialize Components ---
 document.addEventListener('DOMContentLoaded', () => {
-    lucide.createIcons();
-    initMap();
-    initTheme();
-    initWeatherChips();
-    initHeroStats();
-    initHeatmap();
+    try { lucide.createIcons(); } catch (e) { console.error(e); }
+    try { initMap(); } catch (e) { console.error(e); }
+    try { initTheme(); } catch (e) { console.error(e); }
+    try { initWeatherChips(); } catch (e) { console.error(e); }
+    try { initHeroStats(); } catch (e) { console.error(e); }
+    try { initHeatmap(); } catch (e) { console.error(e); }
     
     // Live Temp Update
-    document.getElementById('temp').addEventListener('input', (e) => {
-        document.getElementById('temp-val').textContent = e.target.value + ' K';
-    });
+    const tempEl = document.getElementById('temp');
+    if (tempEl) {
+        tempEl.addEventListener('input', (e) => {
+            const tempValEl = document.getElementById('temp-val');
+            if (tempValEl) tempValEl.textContent = e.target.value + ' K';
+        });
+    }
 
     showSection('hero'); // Start at Home
 });
@@ -40,11 +44,11 @@ function showSection(id) {
             // Initialization Logic per section
             if (id === 'live-map') {
                 if (map) setTimeout(() => map.invalidateSize(), 300);
-                initCommandCenter(); // Wake up live systems
+                try { initCommandCenter(); } catch (e) { console.error('Command center failed:', e); }
             } else if (id === 'analytics') {
-                initAccuracyChart();
-                initNeuralHeatmap();
-                initAuditLog();
+                try { initAccuracyChart(); } catch (e) { console.error('Accuracy chart failed:', e); }
+                try { initNeuralHeatmap(); } catch (e) { console.error('Heatmap failed:', e); }
+                try { initAuditLog(); } catch (e) { console.error('Audit log failed:', e); }
             }
         } else {
             section.classList.remove('active');
@@ -125,6 +129,7 @@ function initHeroStats() {
 
 function initHeatmap() {
     const container = document.getElementById('heatmap-calendar');
+    if (!container) return;
     for (let i = 0; i < 24 * 7; i++) {
         const cell = document.createElement('div');
         cell.className = 'heat-cell';
@@ -135,40 +140,51 @@ function initHeatmap() {
 }
 
 // --- Logic ---
-document.getElementById('prediction-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const weather = document.querySelector('.weather-chip.active').dataset.value;
-    const dateVal = document.getElementById('sim_date').value;
-    const timeVal = document.getElementById('sim_time').value;
-    const formData = {
-        date_time: `${dateVal} ${timeVal}:00`,
-        temp: parseFloat(document.getElementById('temp').value),
-        rain_1h: 0, snow_1h: 0, clouds_all: 40, weather_main: weather
-    };
+const predForm = document.getElementById('prediction-form');
+if (predForm) {
+    predForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const activeWeatherChip = document.querySelector('.weather-chip.active');
+        const weather = activeWeatherChip ? activeWeatherChip.dataset.value : 'Clear';
+        const dateEl = document.getElementById('sim_date');
+        const timeEl = document.getElementById('sim_time');
+        const tempInput = document.getElementById('temp');
+        if (!dateEl || !timeEl || !tempInput) return;
+        
+        const dateVal = dateEl.value;
+        const timeVal = timeEl.value;
+        const formData = {
+            date_time: `${dateVal} ${timeVal}:00`,
+            temp: parseFloat(tempInput.value),
+            rain_1h: 0, snow_1h: 0, clouds_all: 40, weather_main: weather
+        };
 
-    try {
-        const predRes = await fetch('http://127.0.0.1:8000/predict', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
-        const predData = await predRes.json();
+        try {
+            const predRes = await fetch('http://127.0.0.1:8000/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            const predData = await predRes.json();
 
-        const foreRes = await fetch('http://127.0.0.1:8000/forecast', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
-        const foreData = await foreRes.json();
-        currentForecast = foreData.forecast;
+            const foreRes = await fetch('http://127.0.0.1:8000/forecast', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            const foreData = await foreRes.json();
+            currentForecast = foreData.forecast;
 
-        updateInfinityDisplay(predData);
-        updateInfinityChart(foreData.forecast);
-    } catch (e) { alert('Simulation failed: ' + e.message); }
-});
+            updateInfinityDisplay(predData);
+            updateInfinityChart(foreData.forecast);
+        } catch (e) { alert('Simulation failed: ' + e.message); }
+    });
+}
 
 // --- Time Scrubber Logic ---
-document.getElementById('time-scrubber').addEventListener('input', (e) => {
+const scrubberEl = document.getElementById('time-scrubber');
+if (scrubberEl) {
+    scrubberEl.addEventListener('input', (e) => {
     if (!currentForecast || currentForecast.length === 0) return;
     const hourIdx = parseInt(e.target.value);
     const data = currentForecast[hourIdx];
@@ -191,7 +207,8 @@ document.getElementById('time-scrubber').addEventListener('input', (e) => {
         }]);
         forecastChart.update();
     }
-});
+    });
+}
 
 function updateInfinityDisplay(data) {
     const vol = data.prediction;
