@@ -45,6 +45,8 @@ function showSection(id) {
             if (id === 'live-map') {
                 if (map) setTimeout(() => map.invalidateSize(), 300);
                 try { initCommandCenter(); } catch (e) { console.error('Command center failed:', e); }
+            } else if (id === 'route-planner') {
+                try { initRoutePlannerMap(); } catch (e) { console.error('Route map failed:', e); }
             } else if (id === 'analytics') {
                 try { initAccuracyChart(); } catch (e) { console.error('Accuracy chart failed:', e); }
                 try { initNeuralHeatmap(); } catch (e) { console.error('Heatmap failed:', e); }
@@ -66,16 +68,30 @@ function initMap() {
     mapTileLayer = L.tileLayer(tileUrl).addTo(map);
 
     const highwayStyles = [
-        { name: "I-94 East", coords: [[44.95, -93.35], [44.98, -93.15]], vol: 5240 },
-        { name: "I-35E South", coords: [[45.05, -93.20], [44.90, -93.20]], vol: 3120 },
-        { name: "I-394 Hub", coords: [[44.97, -93.50], [44.97, -93.10]], vol: 1850 },
-        { name: "Hwy 55 North", coords: [[44.99, -93.30], [45.05, -93.30]], vol: 800 }
+        { name: "I-94 East Expressway", coords: [[44.95, -93.33], [44.97, -93.20]], vol: 5240 },
+        { name: "I-35W Central Expressway", coords: [[44.91, -93.26], [45.02, -93.26]], vol: 4890 },
+        { name: "I-394 West Corridor", coords: [[44.97, -93.38], [44.97, -93.27]], vol: 3120 },
+        { name: "Hwy 55 Olson Blvd", coords: [[44.985, -93.32], [44.985, -93.27]], vol: 1250 },
+        { name: "Hwy 100 West-Ring", coords: [[44.89, -93.35], [45.03, -93.35]], vol: 4230 },
+        { name: "Hennepin Ave Downtown Parkway", coords: [[44.94, -93.30], [44.99, -93.25]], vol: 1950 },
+        { name: "University Ave Northeast", coords: [[44.97, -93.24], [45.01, -93.25]], vol: 1680 },
+        { name: "Hiawatha Ave South Corridor", coords: [[44.96, -93.25], [44.90, -93.21]], vol: 2950 },
+        { name: "Washington Ave Center-Link", coords: [[44.98, -93.28], [44.97, -93.23]], vol: 1450 },
+        { name: "Lake St Crosstown Arterial", coords: [[44.948, -93.31], [44.948, -93.22]], vol: 3410 }
     ];
 
     highwayStyles.forEach(h => {
-        const color = h.vol > 4500 ? '#ef4444' : h.vol > 2000 ? '#f59e0b' : '#10b981';
+        const color = h.vol > 4500 ? '#e85656' : h.vol > 2000 ? '#f2a134' : '#8cd6c4';
         const poly = L.polyline(h.coords, {color: color, weight: 6, opacity: 0.8}).addTo(map);
-        poly.bindPopup(`<strong>${h.name}</strong><br>Volume: ${h.vol} vph`);
+        
+        // Dynamic visual callout labels directly overlaying road segments
+        poly.bindTooltip(`${h.vol.toLocaleString()} vph`, {
+            permanent: true,
+            direction: 'center',
+            className: 'road-label-callout'
+        });
+        
+        poly.bindPopup(`<strong>${h.name}</strong><br>Volume: ${h.vol.toLocaleString()} vph`);
         storeLayer(poly, h.vol);
     });
 }
@@ -160,6 +176,14 @@ if (predForm) {
         };
 
         try {
+            // Show loading state, hide error
+            const loadingEl = document.getElementById('predict-loading');
+            const errorEl = document.getElementById('predict-error');
+            const btnEl = document.getElementById('run-sim-btn');
+            if (loadingEl) loadingEl.classList.remove('hidden');
+            if (errorEl) errorEl.classList.add('hidden');
+            if (btnEl) { btnEl.disabled = true; btnEl.style.opacity = '0.6'; }
+
             const predRes = await fetch('http://127.0.0.1:8000/predict', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -177,7 +201,28 @@ if (predForm) {
 
             updateInfinityDisplay(predData);
             updateInfinityChart(foreData.forecast);
-        } catch (e) { alert('Simulation failed: ' + e.message); }
+
+            if (loadingEl) loadingEl.classList.add('hidden');
+            if (btnEl) { btnEl.disabled = false; btnEl.style.opacity = '1'; }
+        } catch (err) {
+            const loadingEl = document.getElementById('predict-loading');
+            const errorEl = document.getElementById('predict-error');
+            const btnEl = document.getElementById('run-sim-btn');
+            if (loadingEl) loadingEl.classList.add('hidden');
+            if (errorEl) errorEl.classList.remove('hidden');
+            if (btnEl) { btnEl.disabled = false; btnEl.style.opacity = '1'; }
+            // Fallback: run local simulation so the UI still shows something useful
+            const hour = parseInt(timeVal.split(':')[0]) || 12;
+            let baseVol = hour >= 7 && hour <= 9 ? 4800 : hour >= 16 && hour <= 19 ? 5100 : hour >= 22 || hour <= 5 ? 500 : 2400;
+            baseVol += Math.floor(Math.random() * 300) - 150;
+            const fakeData = {
+                prediction: baseVol,
+                range: { min: Math.round(baseVol * 0.92), max: Math.round(baseVol * 1.08) },
+                insights: { reason: 'Local fallback model (API offline)', recommendation: baseVol > 4000 ? 'Heavy congestion expected' : 'Normal flow' }
+            };
+            updateInfinityDisplay(fakeData);
+            updateInfinityChart(Array.from({ length: 24 }, (_, i) => ({ hour: i, volume: Math.round(baseVol * (0.5 + Math.random() * 0.8)) })));
+        }
     });
 }
 
@@ -228,7 +273,7 @@ function updateInfinityDisplay(data) {
     document.getElementById('confidence-range').textContent = `${data.range.min} - ${data.range.max} vph`;
     
     const avgText = percentage > 50 ? 'Above Average' : 'Below Average';
-    document.getElementById('prediction-context').textContent = `${percentage}% Load &bull; ${avgText}`;
+    document.getElementById('prediction-context').textContent = `${percentage}% Load • ${avgText}`;
 }
 
 function updateInfinityChart(forecast) {
@@ -374,44 +419,183 @@ function initAccuracyChart() {
 }
 
 function initNeuralHeatmap() {
-    const grid = document.getElementById('neural-heatmap');
-    if (!grid) return;
-    grid.innerHTML = '';
-    // 7 days x 24 hours = 168 pills
-    for (let i = 0; i < 168; i++) {
-        const pill = document.createElement('div');
-        pill.className = 'heat-pill';
-        const intensity = Math.random();
-        
-        // Mockup accurate tri-color logic
-        let color = '#10b981'; // Green (Low)
-        if (intensity > 0.75) color = '#ef4444'; // Red (Peak)
-        else if (intensity > 0.4) color = '#f59e0b'; // Amber (Medium)
-        else if (intensity < 0.15) color = 'rgba(255,255,255,0.05)'; // Empty/Dark
-        
-        pill.style.background = color;
-        grid.appendChild(pill);
+    const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    
+    // Clear rows first
+    days.forEach(day => {
+        const rowEl = document.getElementById(`row-${day}`);
+        if (rowEl) rowEl.innerHTML = '';
+    });
+
+    // Create Tooltip if it doesn't exist
+    let tooltip = document.querySelector('.heatmap-tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.className = 'heatmap-tooltip';
+        tooltip.style.position = 'absolute';
+        tooltip.style.display = 'none';
+        document.body.appendChild(tooltip);
     }
+
+    let peakVal = 0;
+    let peakDayHour = '';
+    let quietVal = 99999;
+    let quietDayHour = '';
+    let rushHourSlots = 0;
+
+    // Loop through 7 days
+    for (let d = 0; d < 7; d++) {
+        const dayKey = days[d];
+        const dayName = dayNames[d];
+        const rowEl = document.getElementById(`row-${dayKey}`);
+        if (!rowEl) continue;
+
+        const isWeekday = d < 5;
+
+        // Loop through 24 hours
+        for (let h = 0; h < 24; h++) {
+            const hourStr = String(h).padStart(2, '0') + ':00';
+            const isNight = h < 6 || h > 21;
+            
+            // Peak periods weekdays: 7-9am, 4-7pm
+            const isMorningRush = isWeekday && (h >= 7 && h <= 9);
+            const isEveningRush = isWeekday && (h >= 16 && h <= 18);
+            
+            // Calculate a realistic traffic volume (vph)
+            let volume = 0;
+            if (isWeekday) {
+                if (isMorningRush) {
+                    volume = Math.floor(4500 + Math.random() * 1100); // 4500 - 5600
+                } else if (isEveningRush) {
+                    volume = Math.floor(4800 + Math.random() * 1050); // 4800 - 5850
+                } else if (isNight) {
+                    volume = Math.floor(300 + Math.random() * 600); // 300 - 900
+                } else {
+                    volume = Math.floor(1800 + Math.random() * 1400); // 1800 - 3200
+                }
+            } else {
+                // Weekend
+                if (isNight) {
+                    volume = Math.floor(150 + Math.random() * 450); // 150 - 600
+                } else {
+                    volume = Math.floor(1200 + Math.random() * 1500); // 1200 - 2700
+                }
+            }
+
+            // Track summary metrics
+            if (volume > peakVal) {
+                peakVal = volume;
+                peakDayHour = `${dayName} ${hourStr}`;
+            }
+            if (volume < quietVal) {
+                quietVal = volume;
+                quietDayHour = `${dayName} ${hourStr}`;
+            }
+            if (volume > 4500) {
+                rushHourSlots++;
+            }
+
+            // Map volume to legend colors
+            let color = '';
+            let category = '';
+            if (volume < 1500) {
+                color = '#e2f2f0';
+                category = 'Low';
+            } else if (volume < 3000) {
+                color = '#8cd6c4';
+                category = 'Moderate';
+            } else if (volume < 4500) {
+                color = '#f2a134';
+                category = 'High';
+            } else {
+                color = '#e85656';
+                category = 'Heavy';
+            }
+
+            // Create cell element
+            const cell = document.createElement('div');
+            cell.className = 'heatmap-cell-new';
+            cell.style.backgroundColor = color;
+            
+            // Add tooltips event listeners
+            cell.addEventListener('mouseenter', (e) => {
+                tooltip.innerHTML = `
+                    <div style="font-weight: 800; font-size: 0.85rem; margin-bottom: 2px;">${dayName}, ${hourStr}</div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: ${color}; display: inline-block;"></span>
+                        <span><strong>${volume.toLocaleString()} vph</strong> (${category})</span>
+                    </div>
+                `;
+                tooltip.style.display = 'block';
+                tooltip.style.opacity = '1';
+            });
+            cell.addEventListener('mousemove', (e) => {
+                tooltip.style.left = (e.pageX + 15) + 'px';
+                tooltip.style.top = (e.pageY - 15) + 'px';
+            });
+            cell.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+                tooltip.style.opacity = '0';
+            });
+
+            rowEl.appendChild(cell);
+        }
+    }
+
+    // Populate bottom summary takeaway cards
+    const peakEl = document.getElementById('summary-peak');
+    const peakVphEl = document.getElementById('summary-peak-vph');
+    const quietEl = document.getElementById('summary-quiet');
+    const quietVphEl = document.getElementById('summary-quiet-vph');
+    const rushEl = document.getElementById('summary-rush');
+
+    if (peakEl) peakEl.textContent = peakDayHour;
+    if (peakVphEl) peakVphEl.textContent = `avg ${peakVal.toLocaleString()} vph`;
+    if (quietEl) quietEl.textContent = quietDayHour;
+    if (quietVphEl) quietVphEl.textContent = `avg ${quietVal.toLocaleString()} vph`;
+    if (rushEl) rushEl.textContent = `${rushHourSlots} slots`;
 }
 
 function initAuditLog() {
     const body = document.getElementById('audit-log-body');
+    if (!body) return;
     body.innerHTML = '';
+
+    const weatherOptions = [
+        'Clear Sky', 'Clear Sky', 'Clear Sky',
+        'Rain', 'Rain',
+        'Partly Cloudy',
+        'Snow',
+        'Fog'
+    ];
+    const statusOptions = [
+        { cls: 'good', label: 'Good' },
+        { cls: 'good', label: 'Good' },
+        { cls: 'good', label: 'Good' },
+        { cls: 'good', label: 'Good' },
+        { cls: 'fair', label: 'Fair' },
+        { cls: 'fair', label: 'Fair' },
+        { cls: 'poor', label: 'Poor' },
+        { cls: 'good', label: 'Good' },
+    ];
+
     const rows = 8;
     for (let i = 0; i < rows; i++) {
         const actual = Math.floor(Math.random() * 4000) + 1000;
-        const pred = actual + (Math.random() * 200 - 100);
+        const pred = actual + (Math.random() * 250 - 125);
         const variance = Math.abs(actual - pred).toFixed(0);
-        const status = variance < 100 ? 'good' : 'fair';
-        
+        const weather = weatherOptions[i];
+        const status = statusOptions[i];
+
         body.innerHTML += `
             <tr>
                 <td>Today, 1${i}:00</td>
-                <td>Clear Sky</td>
+                <td>${weather}</td>
                 <td>${pred.toFixed(0)}</td>
                 <td>${actual}</td>
                 <td>${variance} vph</td>
-                <td><span class="status-badge ${status}">${status}</span></td>
+                <td><span class="status-badge ${status.cls}">${status.label}</span></td>
             </tr>
         `;
     }
@@ -453,30 +637,109 @@ function animateNetworkStats() {
 
 function initMiniForecast() {
     const container = document.getElementById('mini-forecast-bars');
-    container.innerHTML = ''; // Clear previous bars
+    if (!container) return;
+    container.innerHTML = '';
+    const avgVol = 2400; // Baseline average volume
+    const maxCapacity = 6000;
+    
+    const profiles = [1.02, 1.05, 1.08, 1.04, 0.98, 0.92];
+    
     for (let i = 0; i < 6; i++) {
-        const h = Math.random() * 80 + 20;
+        const barVol = Math.round(avgVol * profiles[i]);
+        const percent = Math.min(Math.round((barVol / maxCapacity) * 100), 100);
+        const barColor = barVol > 4500 ? '#e85656' : barVol > 2000 ? '#f2a134' : '#8cd6c4';
+        
         const barItem = document.createElement('div');
         barItem.className = 'f-bar-item';
         barItem.innerHTML = `
-            <div class="f-bar" style="height: ${h}%"></div>
+            <div class="f-bar-wrapper">
+                <div class="f-bar" style="height: 0%; background: ${barColor} !important; box-shadow: 0 0 10px ${barColor}80 !important;" data-vol="${barVol}"></div>
+                <div class="f-bar-tooltip">${barVol.toLocaleString()} vph</div>
+            </div>
             <span class="f-label">+${(i+1)*10}m</span>
         `;
         container.appendChild(barItem);
+        
+        // Staggered rise trigger
+        setTimeout(() => {
+            const barEl = barItem.querySelector('.f-bar');
+            if (barEl) barEl.style.height = `${percent}%`;
+        }, 50 * i);
+    }
+}
+
+function updateForecastBars(vol) {
+    const container = document.getElementById('mini-forecast-bars');
+    if (!container) return;
+    container.innerHTML = '';
+    const maxCapacity = 6000;
+    
+    const profiles = [1.02, 1.05, 1.08, 1.04, 0.98, 0.92];
+    
+    for (let i = 0; i < 6; i++) {
+        const barVol = Math.round(vol * profiles[i]);
+        const percent = Math.min(Math.round((barVol / maxCapacity) * 100), 100);
+        const barColor = barVol > 4500 ? '#e85656' : barVol > 2000 ? '#f2a134' : '#8cd6c4';
+        
+        const barItem = document.createElement('div');
+        barItem.className = 'f-bar-item';
+        barItem.innerHTML = `
+            <div class="f-bar-wrapper">
+                <div class="f-bar" style="height: 0%; background: ${barColor} !important; box-shadow: 0 0 10px ${barColor}80 !important;" data-vol="${barVol}"></div>
+                <div class="f-bar-tooltip">${barVol.toLocaleString()} vph</div>
+            </div>
+            <span class="f-label">+${(i+1)*10}m</span>
+        `;
+        container.appendChild(barItem);
+        
+        // Staggered trigger for high-fidelity animations
+        setTimeout(() => {
+            const barEl = barItem.querySelector('.f-bar');
+            if (barEl) barEl.style.height = `${percent}%`;
+        }, 60 * i);
     }
 }
 
 async function runCommandCenterSim() {
     const time = document.getElementById('cmd-time').value;
     const weather = document.getElementById('cmd-weather').value;
-    const resultBox = document.getElementById('sim-result-compact');
+    const temp = parseInt(document.getElementById('cmd-temp').value);
+    const holiday = document.getElementById('cmd-holiday').checked;
     
-    resultBox.classList.remove('hidden');
+    // Hide placeholder, show simulator result compact panel
+    const placeholder = document.getElementById('sim-placeholder');
+    if (placeholder) placeholder.classList.add('hidden');
+    
+    const resultBox = document.getElementById('sim-result-compact');
+    if (resultBox) resultBox.classList.remove('hidden');
+    
     document.getElementById('cmd-res-vol').textContent = "---";
     
     // Simulate Neural "Thinking" delay
     setTimeout(async () => {
-        const vol = Math.floor(Math.random() * 4500) + 500;
+        // Basic flow calculation based on time of day
+        const [hour, min] = time.split(':').map(Number);
+        let baseVol = 800; // night base
+        if ((hour >= 7 && hour <= 9) || (hour >= 16 && hour <= 19)) {
+            baseVol = 4600; // peak rush hours
+        } else if (hour >= 10 && hour <= 15) {
+            baseVol = 2600; // mid-day busy
+        } else if (hour >= 20 || hour <= 6) {
+            baseVol = 400 + (hour >= 20 ? (24 - hour) * 120 : hour * 120);
+        }
+
+        // Adjust for weather
+        if (weather === 'Rain') baseVol += 700;
+        if (weather === 'Snow') baseVol += 1200;
+
+        // Adjust for temperature extremes (extrema drive users to single vehicles)
+        if (temp > 305 || temp < 265) baseVol += 350;
+
+        // Adjust for Holiday
+        if (holiday) baseVol = Math.round(baseVol * 0.55); // holidays cut commuter traffic by 45%
+
+        const vol = Math.max(150, baseVol + Math.floor(Math.random() * 300) - 150);
+        
         anime({
             targets: '#cmd-res-vol',
             innerHTML: [0, vol],
@@ -484,8 +747,14 @@ async function runCommandCenterSim() {
             duration: 1000,
             easing: 'easeOutExpo'
         });
-        document.getElementById('cmd-res-status').textContent = vol > 3500 ? 'CONGESTED' : 'STABLE';
-        document.getElementById('cmd-res-status').style.color = vol > 3500 ? 'var(--danger)' : 'var(--success)';
+        
+        const isCongested = vol > 3800;
+        const statusEl = document.getElementById('cmd-res-status');
+        statusEl.textContent = isCongested ? 'CONGESTED' : 'STABLE';
+        statusEl.style.color = isCongested ? '#e85656' : '#8cd6c4';
+        
+        // Dynamically update the 60-min forecast bars based on predicted traffic flow!
+        updateForecastBars(vol);
     }, 800);
 }
 
@@ -559,7 +828,7 @@ let activeMapLayers = [];
 
 function filterMap(type, el) {
     // Update UI
-    document.querySelectorAll('.legend-item').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.filter-pill').forEach(item => item.classList.remove('active'));
     el.classList.add('active');
 
     // Filter Layers
@@ -581,4 +850,109 @@ function filterMap(type, el) {
 function storeLayer(layer, vol) {
     layer.volume = vol;
     activeMapLayers.push(layer);
+}
+
+// --- Analytics: Date Range Filter ---
+let currentDateRange = 7;
+
+function setDateRange(days, el) {
+    currentDateRange = days;
+    document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    // Re-render the chart and heatmap with the new range label
+    refreshAnalytics();
+}
+
+// --- Route Planner ---
+let routeMap = null;
+
+function initRoutePlannerMap() {
+    if (routeMap) return;
+    const container = document.getElementById('route-map-container');
+    if (!container) return;
+    routeMap = L.map('route-map-container').setView([44.9778, -93.2650], 12);
+    const isLight = document.body.classList.contains('light-theme');
+    const tileUrl = isLight
+        ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+        : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    L.tileLayer(tileUrl).addTo(routeMap);
+
+    // Draw same road network on the route map
+    const segments = [
+        { coords: [[44.95, -93.33], [44.97, -93.20]], vol: 5240 },
+        { coords: [[44.91, -93.26], [45.02, -93.26]], vol: 4890 },
+        { coords: [[44.97, -93.38], [44.97, -93.27]], vol: 3120 },
+        { coords: [[44.985, -93.32], [44.985, -93.27]], vol: 1250 },
+        { coords: [[44.89, -93.35], [45.03, -93.35]], vol: 4230 },
+        { coords: [[44.94, -93.30], [44.99, -93.25]], vol: 1950 },
+        { coords: [[44.97, -93.24], [45.01, -93.25]], vol: 1680 },
+        { coords: [[44.96, -93.25], [44.90, -93.21]], vol: 2950 },
+        { coords: [[44.948, -93.31], [44.948, -93.22]], vol: 3410 }
+    ];
+    segments.forEach(s => {
+        const color = s.vol > 4500 ? '#e85656' : s.vol > 2000 ? '#f2a134' : '#8cd6c4';
+        L.polyline(s.coords, { color, weight: 5, opacity: 0.75 }).addTo(routeMap);
+    });
+}
+
+function planRoute() {
+    const origin = document.getElementById('route-origin').value.trim();
+    const dest = document.getElementById('route-dest').value.trim();
+    const time = document.getElementById('route-time').value;
+    const priority = document.getElementById('route-priority').value;
+
+    const placeholder = document.getElementById('route-placeholder');
+    const results = document.getElementById('route-results');
+    const list = document.getElementById('route-options-list');
+
+    if (!origin || !dest) {
+        if (placeholder) placeholder.innerHTML = '<i data-lucide="alert-circle" style="color:#e85656;font-size:1.5rem;"></i><p style="color:#e85656;">Please enter both origin and destination.</p>';
+        lucide.createIcons();
+        return;
+    }
+
+    if (placeholder) placeholder.classList.add('hidden');
+    if (results) results.classList.remove('hidden');
+
+    // Simulated route options based on priority
+    const routes = [
+        { label: 'Via I-35W Central', time: '18 min', dist: '12.4 km', congestion: 'Moderate', incidents: 0, speed: '41 km/h', tag: 'Fastest', tagCls: 'tag-green' },
+        { label: 'Via Hennepin Ave', time: '23 min', dist: '10.8 km', congestion: 'Clear', incidents: 0, speed: '28 km/h', tag: 'Least congested', tagCls: 'tag-blue' },
+        { label: 'Via Lake St Arterial', time: '31 min', dist: '13.1 km', congestion: 'Heavy', incidents: 1, speed: '25 km/h', tag: 'Scenic', tagCls: 'tag-amber' },
+    ];
+
+    // Sort by priority
+    if (priority === 'fastest') routes.sort((a, b) => parseInt(a.time) - parseInt(b.time));
+    else if (priority === 'least_congested') routes.sort((a, b) => a.congestion === 'Clear' ? -1 : 1);
+
+    list.innerHTML = routes.map((r, i) => `
+        <div class="route-option-card ${i === 0 ? 'route-option-recommended' : ''}">
+            <div class="route-option-top">
+                <div>
+                    <span class="route-option-name">${r.label}</span>
+                    ${i === 0 ? `<span class="route-tag ${r.tagCls}">${r.tag}</span>` : ''}
+                </div>
+                <span class="route-option-time">${r.time}</span>
+            </div>
+            <div class="route-option-meta">
+                <span><i data-lucide="milestone"></i> ${r.dist}</span>
+                <span><i data-lucide="gauge"></i> ${r.speed}</span>
+                <span><i data-lucide="alert-triangle" style="color:${r.incidents > 0 ? '#e85656' : '#8cd6c4'}"></i> ${r.incidents} incident${r.incidents !== 1 ? 's' : ''}</span>
+            </div>
+        </div>
+    `).join('');
+
+    // Update stat strip
+    const best = routes[0];
+    const etaEl = document.getElementById('route-eta');
+    const distEl = document.getElementById('route-distance');
+    const incEl = document.getElementById('route-incidents');
+    const speedEl = document.getElementById('route-avg-speed');
+    if (etaEl) etaEl.textContent = best.time;
+    if (distEl) distEl.textContent = best.dist;
+    if (incEl) incEl.textContent = best.incidents + ' found';
+    if (speedEl) speedEl.textContent = best.speed;
+
+    lucide.createIcons();
+    setTimeout(() => { if (routeMap) routeMap.invalidateSize(); }, 100);
 }

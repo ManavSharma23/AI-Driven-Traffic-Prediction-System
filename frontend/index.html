@@ -54,6 +54,10 @@
                     <i data-lucide="brain"></i>
                     <span>Neural Predictor</span>
                 </a>
+                <a href="javascript:void(0)" onclick="showSection('route-planner')" id="nav-route-planner" class="nav-item">
+                    <i data-lucide="route"></i>
+                    <span>Route Planner</span>
+                </a>
                 <a href="javascript:void(0)" onclick="showSection('analytics')" id="nav-analytics" class="nav-item">
                     <i data-lucide="bar-chart-3"></i>
                     <span>Analytics</span>
@@ -90,16 +94,20 @@
                     <div class="visual-bg-glow"></div>
                     <!-- Floating Map Cards -->
                     <div class="floating-card c1">
-                        <div class="f-label">I-75 Northbound</div>
+                        <div class="f-card-header"><div class="live-pulse-dot"></div><span class="f-label">I-75 Northbound</span></div>
                         <div class="f-val">4,520 <small>vph</small></div>
                     </div>
                     <div class="floating-card c2">
-                        <div class="f-label">Downtown Connector</div>
+                        <div class="f-card-header"><div class="live-pulse-dot"></div><span class="f-label">Downtown Connector</span></div>
                         <div class="f-val">3,280 <small>vph</small></div>
                     </div>
                     <div class="floating-card c3">
-                        <div class="f-label">Mapleton Expressway</div>
+                        <div class="f-card-header"><div class="live-pulse-dot"></div><span class="f-label">Mapleton Expressway</span></div>
                         <div class="f-val">2,150 <small>vph</small></div>
+                    </div>
+                    <div class="floating-card c4">
+                        <div class="f-card-header"><div class="live-pulse-dot amber"></div><span class="f-label">Lakeview Overpass</span></div>
+                        <div class="f-val">1,870 <small>vph</small></div>
                     </div>
                 </div>
             </div>
@@ -147,32 +155,32 @@
                     <div class="m-icon purple"><i data-lucide="cpu"></i></div>
                     <h4>Neural Prediction Engine</h4>
                     <p>Deep learning models process complex patterns to deliver ultra-accurate traffic volume forecasts.</p>
-                    <a href="#" class="learn-more">Learn More <i data-lucide="arrow-right"></i></a>
+                    <a href="javascript:void(0)" onclick="showSection('forecast')" class="learn-more">Go to Neural Predictor <i data-lucide="arrow-right"></i></a>
                 </div>
                 <div class="mock-feature-card">
                     <div class="m-icon green"><i data-lucide="shield-check"></i></div>
                     <h4>Real-time Intelligence</h4>
                     <p>Live data from thousands of sensors and sources keeps every prediction one step ahead.</p>
-                    <a href="#" class="learn-more">Learn More <i data-lucide="arrow-right"></i></a>
+                    <a href="javascript:void(0)" onclick="showSection('live-map')" class="learn-more">View Network Map <i data-lucide="arrow-right"></i></a>
                 </div>
                 <div class="mock-feature-card">
                     <div class="m-icon blue"><i data-lucide="share-2"></i></div>
                     <h4>Open & Connected</h4>
                     <p>Seamlessly integrate our traffic data and predictions into your systems via powerful APIs.</p>
-                    <a href="#" class="learn-more">Learn More <i data-lucide="arrow-right"></i></a>
+                    <a href="javascript:void(0)" onclick="showSection('analytics')" class="learn-more">View Analytics <i data-lucide="arrow-right"></i></a>
                 </div>
             </div>
 
-            <!-- Partner Bar -->
+            <!-- Built For Bar -->
             <div class="partner-bar">
-                <span class="partner-title">TRUSTED BY FORWARD-THINKING ORGANIZATIONS</span>
+                <span class="partner-title">Built for projects like</span>
                 <div class="partner-logos">
-                    <span><i data-lucide="building"></i> CityFlow</span>
-                    <span><i data-lucide="train"></i> MetroTransit</span>
-                    <span><i data-lucide="microscope"></i> SmartCity Labs</span>
-                    <span><i data-lucide="landmark"></i> UrbanLogix</span>
-                    <span><i data-lucide="map-pin"></i> RoadSense</span>
-                    <span><i data-lucide="zap"></i> FlowOps</span>
+                    <span><i data-lucide="building-2"></i> Smart City Initiatives</span>
+                    <span><i data-lucide="train"></i> Transit Authorities</span>
+                    <span><i data-lucide="microscope"></i> Urban Research Labs</span>
+                    <span><i data-lucide="landmark"></i> Municipal Planning</span>
+                    <span><i data-lucide="map-pin"></i> Road Safety Orgs</span>
+                    <span><i data-lucide="graduation-cap"></i> Academic Datasets</span>
                 </div>
             </div>
         </section>
@@ -181,98 +189,241 @@
         <section id="live-map" class="spa-section">
             <div class="command-header">
                 <div class="command-title-group">
-                    <h1>CITY COMMAND CENTER <span class="heartbeat">● LIVE</span></h1>
+                    <h1>City command center <span class="live-badge"><span class="pulsing-dot"></span>LIVE</span></h1>
                     <p>AI Neural Infrastructure v4.2.0 | Node: MSP-CENTRAL</p>
                 </div>
-                <div class="command-sensors">
-                    <div class="sensor-chip"><i data-lucide="cloud-sun"></i> 288 K</div>
-                    <div class="sensor-chip"><i data-lucide="clock"></i> <span id="live-time">12:00:00</span></div>
+            </div>
+
+            <!-- Full Width City Status Ticker Strip -->
+            <div class="command-ticker-strip">
+                <div class="ticker-item">
+                    <i data-lucide="activity" class="ticker-icon success"></i>
+                    <span class="ticker-label">Total Flow Rate:</span>
+                    <span class="ticker-val" id="ticker-total-vph">10,910 vph</span>
+                    <span class="ticker-trend success">↑ 3.4%</span>
+                </div>
+                <div class="ticker-divider"></div>
+                <div class="ticker-item">
+                    <i data-lucide="alert-triangle" class="ticker-icon danger"></i>
+                    <span class="ticker-label">Active Incidents:</span>
+                    <span class="ticker-val danger-text">2 Major</span>
+                    <span class="ticker-trend danger">↑ 1</span>
+                </div>
+                <div class="ticker-divider"></div>
+                <div class="ticker-item">
+                    <i data-lucide="gauge" class="ticker-icon primary"></i>
+                    <span class="ticker-label">City Avg Speed:</span>
+                    <span class="ticker-val">48.2 km/h</span>
+                    <span class="ticker-trend success">↑ 1.2%</span>
+                </div>
+                <div class="ticker-divider"></div>
+                <div class="ticker-item">
+                    <i data-lucide="radio" class="ticker-icon warning"></i>
+                    <span class="ticker-label">IoT Sensor Hub:</span>
+                    <span class="ticker-val">1,424 nodes</span>
+                    <span class="ticker-trend success">100% OK</span>
                 </div>
             </div>
 
             <div class="command-grid">
-                <!-- Side Panel: Stats -->
+                <!-- Side Panel: Stats (Wider, grid-based, clock integrated) -->
                 <div class="command-sidebar">
-                    <div class="glass-card mini-stat-panel" style="height: 100%;">
-                        <h3>NETWORK STATUS</h3>
-                        <div class="mini-stat-item">
-                            <label>Active Roads</label>
-                            <span class="count-up" id="stat-active-roads">0</span>
+                    <div class="glass-card mini-stat-panel" style="height: 100%; display: flex; flex-direction: column;">
+                        <h3>Network Status</h3>
+                        
+                        <!-- Integrated Clock & Weather -->
+                        <div class="left-panel-time-weather">
+                            <div class="panel-time">
+                                <i data-lucide="clock"></i>
+                                <span id="live-time">12:00:00</span>
+                            </div>
+                            <div class="panel-weather">
+                                <i data-lucide="cloud-sun"></i>
+                                <span>288 K</span>
+                            </div>
                         </div>
-                        <div class="mini-stat-item">
-                            <label>Congested Segments</label>
-                            <span class="count-up danger" id="stat-congested">0</span>
-                        </div>
-                        <div class="mini-stat-item">
-                            <label>Average Speed</label>
-                            <span class="count-up success" id="stat-avg-speed">0</span> <small>km/h</small>
-                        </div>
-                        <div class="mini-stat-item">
-                            <label>Active Predictions</label>
-                            <span class="count-up" id="stat-active-preds">0</span>
-                        </div>
-                        <div class="mini-stat-item" style="border: none;">
-                            <label>System Health</label>
-                            <span class="count-up">99.8%</span>
+
+                        <!-- 2x3 Grid of telemetry stats -->
+                        <div class="stats-grid-2x3">
+                            <!-- Stat 1 -->
+                            <div class="stat-grid-item">
+                                <div class="stat-label-row">
+                                    <i data-lucide="milestone"></i>
+                                    <span>Active Roads</span>
+                                </div>
+                                <div class="stat-value-row">
+                                    <span class="stat-val-big count-up" id="stat-active-roads">0</span>
+                                    <span class="stat-trend-indicator up">↑ 4%</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Stat 2 -->
+                            <div class="stat-grid-item">
+                                <div class="stat-label-row">
+                                    <i data-lucide="alert-octagon"></i>
+                                    <span>Congested</span>
+                                </div>
+                                <div class="stat-value-row">
+                                    <span class="stat-val-big count-up stat-pulse-red" id="stat-congested">0</span>
+                                    <span class="stat-trend-indicator down" style="color: #e85656;">↓ 12%</span>
+                                </div>
+                            </div>
+
+                            <!-- Stat 3 -->
+                            <div class="stat-grid-item">
+                                <div class="stat-label-row">
+                                    <i data-lucide="gauge"></i>
+                                    <span>Avg Speed</span>
+                                </div>
+                                <div class="stat-value-row">
+                                    <span class="stat-val-big count-up success" id="stat-avg-speed">0</span>
+                                    <span class="stat-trend-indicator up">↑ 3.8%</span>
+                                </div>
+                            </div>
+
+                            <!-- Stat 4 -->
+                            <div class="stat-grid-item">
+                                <div class="stat-label-row">
+                                    <i data-lucide="cpu"></i>
+                                    <span>AI Preds</span>
+                                </div>
+                                <div class="stat-value-row">
+                                    <span class="stat-val-big count-up" id="stat-active-preds">0</span>
+                                    <span class="stat-trend-indicator up">↑ 8%</span>
+                                </div>
+                            </div>
+
+                            <!-- Stat 5 -->
+                            <div class="stat-grid-item">
+                                <div class="stat-label-row">
+                                    <i data-lucide="heart-pulse"></i>
+                                    <span>Health</span>
+                                </div>
+                                <div class="stat-value-row">
+                                    <span class="stat-val-big count-up">99.8%</span>
+                                    <span class="stat-trend-indicator neutral">~ 0%</span>
+                                </div>
+                            </div>
+
+                            <!-- Stat 6 -->
+                            <div class="stat-grid-item">
+                                <div class="stat-label-row">
+                                    <i data-lucide="wifi"></i>
+                                    <span>Signal Loss</span>
+                                </div>
+                                <div class="stat-value-row">
+                                    <span class="stat-val-big">0.04%</span>
+                                    <span class="stat-trend-indicator down">↓ 2%</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Center: The Map -->
+                <!-- Center: Map with overlay legends and pill filters -->
                 <div class="command-center-map">
                     <div id="map-container" class="infrastructure-map"></div>
-                    <div class="map-overlay-legend">
-                        <div class="legend-item active" onclick="filterMap('all', this)">
-                            <span>All</span>
+                    
+                    <!-- Map Overlay Filter Pills -->
+                    <div class="map-overlay-filter">
+                        <button class="filter-pill active" onclick="filterMap('all', this)">All</button>
+                        <button class="filter-pill" onclick="filterMap('smooth', this)">
+                            <span class="dot green"></span> Smooth
+                        </button>
+                        <button class="filter-pill" onclick="filterMap('medium', this)">
+                            <span class="dot amber"></span> Medium
+                        </button>
+                        <button class="filter-pill" onclick="filterMap('congested', this)">
+                            <span class="dot red"></span> Congested
+                        </button>
+                    </div>
+
+                    <!-- Map Overlay Legend Card -->
+                    <div class="map-overlay-legend-card">
+                        <div class="legend-header-title">Map Legend</div>
+                        <div class="legend-row-new">
+                            <span class="legend-line green"></span>
+                            <span class="legend-label">Smooth (&lt;2k vph)</span>
                         </div>
-                        <div class="legend-item" onclick="filterMap('smooth', this)">
-                            <div class="legend-dot green"></div> <span>Smooth</span>
+                        <div class="legend-row-new">
+                            <span class="legend-line amber"></span>
+                            <span class="legend-label">Moderate (2k - 4.5k vph)</span>
                         </div>
-                        <div class="legend-item" onclick="filterMap('medium', this)">
-                            <div class="legend-dot amber"></div> <span>Medium</span>
-                        </div>
-                        <div class="legend-item" onclick="filterMap('congested', this)">
-                            <div class="legend-dot red"></div> <span>Congested</span>
+                        <div class="legend-row-new">
+                            <span class="legend-line red"></span>
+                            <span class="legend-label">Congested (&gt;4.5k vph)</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Panel: Forecasting & Inputs -->
-                <div class="command-prediction-panel">
-                    <div class="glass-card simulator-box">
-                        <h3>NEURAL SIMULATOR</h3>
-                        <div class="sim-form-compact">
-                            <div class="sim-row">
-                                <label>Time</label>
-                                <input type="time" id="cmd-time" value="08:00">
+                <!-- Right Panel: Simulator, Forecasting & sliders -->
+                <div class="command-prediction-panel" style="display: flex; flex-direction: column; gap: 1rem; height: 100%;">
+                    <div class="glass-card simulator-box" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h3>Neural Simulator</h3>
+                            <div class="sim-form-compact">
+                                <div class="sim-row">
+                                    <label>Time</label>
+                                    <input type="time" id="cmd-time" value="08:00">
+                                </div>
+                                <div class="sim-row">
+                                    <label>Weather</label>
+                                    <select id="cmd-weather">
+                                        <option value="Clear">Clear</option>
+                                        <option value="Rain">Rain</option>
+                                        <option value="Snow">Snow</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Slider Input -->
+                                <div class="sim-row-slider">
+                                    <div class="slider-label-group">
+                                        <label>Temperature</label>
+                                        <span id="cmd-temp-val">288 K</span>
+                                    </div>
+                                    <input type="range" id="cmd-temp" min="250" max="320" value="288" oninput="document.getElementById('cmd-temp-val').textContent = this.value + ' K'">
+                                </div>
+
+                                <!-- Switch Input -->
+                                <div class="sim-row-toggle">
+                                    <label>Holiday / Event</label>
+                                    <label class="luxury-switch">
+                                        <input type="checkbox" id="cmd-holiday">
+                                        <span class="switch-slider"></span>
+                                    </label>
+                                </div>
+
+                                <button onclick="runCommandCenterSim()" class="command-btn">Generate prediction</button>
                             </div>
-                            <div class="sim-row">
-                                <label>Weather</label>
-                                <select id="cmd-weather">
-                                    <option value="Clear">Clear</option>
-                                    <option value="Rain">Rain</option>
-                                    <option value="Snow">Snow</option>
-                                </select>
-                            </div>
-                            <button onclick="runCommandCenterSim()" class="command-btn">GENERATE PREDICTION</button>
                         </div>
-                        
-                        <div id="sim-result-compact" class="sim-result-compact hidden">
-                            <div class="res-vph"><span id="cmd-res-vol">0</span> <small>vph</small></div>
-                            <div class="res-meta">
-                                <span id="cmd-res-status">STABLE</span>
-                                <span id="cmd-res-conf">CONF: 92%</span>
+
+                        <!-- Results compact / Placeholder state -->
+                        <div>
+                            <div class="panel-section-divider"></div>
+                            
+                            <div id="sim-placeholder" class="sim-placeholder-text">
+                                <i data-lucide="info" class="placeholder-icon"></i>
+                                <span>Run a prediction to see results</span>
+                            </div>
+                            
+                            <div id="sim-result-compact" class="sim-result-compact hidden">
+                                <div class="res-vph"><span id="cmd-res-vol">0</span> <small>vph</small></div>
+                                <div class="res-meta">
+                                    <span id="cmd-res-status">STABLE</span>
+                                    <span id="cmd-res-conf">CONF: 92%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="glass-card forecast-mini-box">
-                        <h3>60-MIN FORECAST</h3>
+                    <div class="glass-card forecast-mini-box" style="height: 180px;">
+                        <h3>60-Min Forecast</h3>
                         <div class="forecast-bars" id="mini-forecast-bars">
-                            <!-- Bars here -->
+                            <!-- Injected dynamically with dynamic heights & tooltips -->
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </section>
 
@@ -291,7 +442,7 @@
                             <i data-lucide="calendar-days"></i>
                         </div>
                         <div class="schedule-title-group">
-                            <h3>SIMULATION SCHEDULE</h3>
+                            <h3>Simulation schedule</h3>
                             <p>Select the date and time for traffic simulation</p>
                         </div>
                     </div>
@@ -300,27 +451,21 @@
                         <div class="schedule-grid">
                             <!-- Date Input -->
                             <div class="input-module">
-                                <label class="module-label">DATE</label>
+                                <label class="module-label">Date</label>
                                 <div class="module-input-wrapper date-style">
                                     <i data-lucide="calendar" class="input-icon"></i>
                                     <input type="text" id="sim_date" value="2023-12-23" placeholder="YYYY-MM-DD">
                                     <i data-lucide="chevron-down" class="chevron"></i>
                                 </div>
-                                <div class="module-helper">
-                                    <i data-lucide="calendar"></i> YYYY-MM-DD
-                                </div>
                             </div>
 
                             <!-- Time Input -->
                             <div class="input-module">
-                                <label class="module-label">TIME</label>
+                                <label class="module-label">Time</label>
                                 <div class="module-input-wrapper time-style">
                                     <i data-lucide="clock" class="input-icon"></i>
                                     <input type="text" id="sim_time" value="12:23" placeholder="HH:MM">
                                     <i data-lucide="chevron-down" class="chevron"></i>
-                                </div>
-                                <div class="module-helper">
-                                    <i data-lucide="clock"></i> 24-Hour Format
                                 </div>
                             </div>
                         </div>
@@ -328,8 +473,24 @@
                         <!-- Hidden weather chip for logic continuity -->
                         <div style="display:none;"><div class="weather-chip active" data-value="Clear"></div><input type="range" id="temp" value="288"></div>
 
-                        <button type="submit" class="execute-btn">
-                            <i data-lucide="zap"></i> RUN NEURAL SIMULATION
+                        <!-- Loading skeleton state (hidden by default) -->
+                        <div id="predict-loading" class="predict-loading-state hidden">
+                            <div class="loading-gauge-ring"></div>
+                            <span>Neural model processing...</span>
+                        </div>
+
+                        <!-- Error state (hidden by default) -->
+                        <div id="predict-error" class="predict-error-state hidden">
+                            <i data-lucide="alert-triangle"></i>
+                            <div>
+                                <strong>Prediction failed</strong>
+                                <p>Could not reach the prediction API. Check that the backend is running on port 8000.</p>
+                            </div>
+                            <button onclick="document.getElementById('predict-error').classList.add('hidden')" class="error-dismiss-btn">Dismiss</button>
+                        </div>
+
+                        <button type="submit" class="execute-btn" id="run-sim-btn">
+                            <i data-lucide="zap"></i> Run neural simulation
                         </button>
                     </form>
                 </div>
@@ -412,7 +573,107 @@
             </div>
         </section>
 
-        <!-- 4. Deep Analytics -->
+        <!-- 4. Route Planner -->
+        <section id="route-planner" class="spa-section">
+            <div class="section-header-centered">
+                <h2>Route Planner</h2>
+                <p>Analyse routes based on real-time and predicted traffic conditions</p>
+            </div>
+
+            <div class="route-planner-grid">
+                <!-- Input Panel -->
+                <div class="glass-card route-input-card">
+                    <h3>Plan your route</h3>
+                    <div class="route-form">
+                        <div class="route-input-group">
+                            <label><i data-lucide="map-pin"></i> Origin</label>
+                            <input type="text" id="route-origin" placeholder="Enter starting point" class="route-text-input">
+                        </div>
+                        <div class="route-connector-dot"></div>
+                        <div class="route-input-group">
+                            <label><i data-lucide="flag"></i> Destination</label>
+                            <input type="text" id="route-dest" placeholder="Enter destination" class="route-text-input">
+                        </div>
+                        <div class="route-options-row">
+                            <div class="route-option-item">
+                                <label>Departure time</label>
+                                <input type="time" id="route-time" value="08:00" class="route-time-input">
+                            </div>
+                            <div class="route-option-item">
+                                <label>Priority</label>
+                                <select id="route-priority" class="route-select">
+                                    <option value="fastest">Fastest route</option>
+                                    <option value="least_congested">Least congested</option>
+                                    <option value="scenic">Scenic / arterials</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="execute-btn" onclick="planRoute()">
+                            <i data-lucide="route"></i> Plan route
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Panel -->
+                <div class="glass-card route-results-card" id="route-results-card">
+                    <div class="route-placeholder" id="route-placeholder">
+                        <i data-lucide="map" style="font-size: 2rem; color: var(--primary); opacity: 0.5;"></i>
+                        <p>Enter origin and destination to see route options</p>
+                    </div>
+                    <div id="route-results" class="hidden">
+                        <h3>Route options <span class="route-result-badge" id="route-count">3 found</span></h3>
+                        <div class="route-options-list" id="route-options-list"></div>
+                    </div>
+                </div>
+
+                <!-- Map Panel -->
+                <div class="route-map-panel glass-card">
+                    <div class="route-map-header">
+                        <h3>Live traffic map</h3>
+                        <div class="route-map-legend">
+                            <span><span class="route-dot green"></span> Clear</span>
+                            <span><span class="route-dot amber"></span> Moderate</span>
+                            <span><span class="route-dot red"></span> Heavy</span>
+                        </div>
+                    </div>
+                    <div id="route-map-container" class="route-map-view"></div>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="route-stats-strip">
+                    <div class="route-stat-item">
+                        <i data-lucide="clock" class="route-stat-icon"></i>
+                        <div>
+                            <span class="route-stat-val" id="route-eta">--</span>
+                            <span class="route-stat-label">Est. travel time</span>
+                        </div>
+                    </div>
+                    <div class="route-stat-item">
+                        <i data-lucide="milestone" class="route-stat-icon"></i>
+                        <div>
+                            <span class="route-stat-val" id="route-distance">--</span>
+                            <span class="route-stat-label">Distance</span>
+                        </div>
+                    </div>
+                    <div class="route-stat-item">
+                        <i data-lucide="alert-triangle" class="route-stat-icon"></i>
+                        <div>
+                            <span class="route-stat-val" id="route-incidents">--</span>
+                            <span class="route-stat-label">Incidents</span>
+                        </div>
+                    </div>
+                    <div class="route-stat-item">
+                        <i data-lucide="gauge" class="route-stat-icon"></i>
+                        <div>
+                            <span class="route-stat-val" id="route-avg-speed">--</span>
+                            <span class="route-stat-label">Avg speed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Deep Analytics -->
         <section id="analytics" class="spa-section">
             <!-- Global Actions Bar -->
             <div class="analytics-actions-bar">
@@ -421,6 +682,12 @@
                     <p>Live accuracy auditing and system health metrics</p>
                 </div>
                 <div class="global-actions">
+                    <!-- Date range filter -->
+                    <div class="date-range-tabs" id="date-range-tabs">
+                        <button class="date-tab active" onclick="setDateRange(7, this)">Last 7 days</button>
+                        <button class="date-tab" onclick="setDateRange(30, this)">30 days</button>
+                        <button class="date-tab" onclick="setDateRange(90, this)">90 days</button>
+                    </div>
                     <button class="btn-icon" onclick="exportCSV()"><i data-lucide="download"></i> Export CSV</button>
                     <button class="btn-icon"><i data-lucide="file-text"></i> PDF Report</button>
                     <button class="btn-icon primary-btn" onclick="refreshAnalytics()"><i data-lucide="refresh-cw"></i> Sync Data</button>
@@ -477,22 +744,81 @@
 
                 <!-- 3. Congestion Heatmap -->
                 <!-- Temporal Intensity Map (Mockup Accurate) -->
+            <!-- 3. Congestion Heatmap -->
             <div class="glass-card full-width intensity-map-card">
-                <div class="intensity-header">
-                    <h3>Temporal Intensity Map</h3>
-                    <p>Congestion density by Day and Hour</p>
+                <div class="intensity-header-flex">
+                    <div class="title-group">
+                        <h3>Congestion heatmap</h3>
+                        <p>Average traffic volume by hour and day — past 30 days</p>
+                    </div>
+                    <div class="heatmap-meta">
+                        <div class="heatmap-legend-new">
+                            <span class="legend-item-new"><span class="l-sq low"></span> Low &lt;1.5k</span>
+                            <span class="legend-item-new"><span class="l-sq mod"></span> Moderate</span>
+                            <span class="legend-item-new"><span class="l-sq high"></span> High</span>
+                            <span class="legend-item-new"><span class="l-sq heavy"></span> Heavy &gt;4.5k</span>
+                        </div>
+                        <p class="hover-info">Hover any cell for exact volume</p>
+                    </div>
                 </div>
                 
-                <div id="neural-heatmap" class="pill-grid">
-                    <!-- Pill cells injected via JS -->
+                <div class="heatmap-container-outer">
+                    <div class="heatmap-grid-layout">
+                        <!-- Corner -->
+                        <div></div>
+                        
+                        <!-- Hour headers row -->
+                        <div class="hours-header-row">
+                            <span>00:00</span>
+                            <span>03:00</span>
+                            <span>06:00</span>
+                            <span>09:00</span>
+                            <span>12:00</span>
+                            <span>15:00</span>
+                            <span>18:00</span>
+                            <span>21:00</span>
+                        </div>
+                        
+                        <!-- Days and Cells -->
+                        <div class="day-label">Mon</div>
+                        <div class="heatmap-cells-row" id="row-mon"></div>
+                        
+                        <div class="day-label">Tue</div>
+                        <div class="heatmap-cells-row" id="row-tue"></div>
+                        
+                        <div class="day-label">Wed</div>
+                        <div class="heatmap-cells-row" id="row-wed"></div>
+                        
+                        <div class="day-label">Thu</div>
+                        <div class="heatmap-cells-row" id="row-thu"></div>
+                        
+                        <div class="day-label">Fri</div>
+                        <div class="heatmap-cells-row" id="row-fri"></div>
+                        
+                        <div class="day-label">Sat</div>
+                        <div class="heatmap-cells-row" id="row-sat"></div>
+                        
+                        <div class="day-label">Sun</div>
+                        <div class="heatmap-cells-row" id="row-sun"></div>
+                    </div>
                 </div>
 
-                <div class="intensity-legend">
-                    <div class="legend-row">
-                        <div class="l-dot green"></div> <span>Low Intensity</span>
+                <!-- Three Summary Takeaways at the bottom -->
+                <div class="heatmap-summary-row">
+                    <div class="heatmap-summary-card">
+                        <label>Peak congestion</label>
+                        <span class="summary-val danger" id="summary-peak">Fri 17:00</span>
+                        <p class="summary-desc" id="summary-peak-vph">avg 5,820 vph</p>
                     </div>
-                    <div class="legend-row">
-                        <div class="l-dot red"></div> <span>Peak Congestion</span>
+                    <div class="heatmap-summary-card">
+                        <label>Quietest slot</label>
+                        <span class="summary-val success" id="summary-quiet">Sun 03:00</span>
+                        <p class="summary-desc" id="summary-quiet-vph">avg 210 vph</p>
+                    </div>
+                    <div class="heatmap-summary-card">
+                        <label>Rush hours/week</label>
+                        <span class="summary-val white" id="summary-rush">24 slots</span>
+                        <p class="summary-desc">above 4,500 vph</p>
                     </div>
                 </div>
             </div>
