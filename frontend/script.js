@@ -45,8 +45,6 @@ function showSection(id) {
             if (id === 'live-map') {
                 if (map) setTimeout(() => map.invalidateSize(), 300);
                 try { initCommandCenter(); } catch (e) { console.error('Command center failed:', e); }
-            } else if (id === 'route-planner') {
-                try { initRoutePlannerMap(); } catch (e) { console.error('Route map failed:', e); }
             } else if (id === 'analytics') {
                 try { initAccuracyChart(); } catch (e) { console.error('Accuracy chart failed:', e); }
                 try { initNeuralHeatmap(); } catch (e) { console.error('Heatmap failed:', e); }
@@ -863,96 +861,3 @@ function setDateRange(days, el) {
     refreshAnalytics();
 }
 
-// --- Route Planner ---
-let routeMap = null;
-
-function initRoutePlannerMap() {
-    if (routeMap) return;
-    const container = document.getElementById('route-map-container');
-    if (!container) return;
-    routeMap = L.map('route-map-container').setView([44.9778, -93.2650], 12);
-    const isLight = document.body.classList.contains('light-theme');
-    const tileUrl = isLight
-        ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-        : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-    L.tileLayer(tileUrl).addTo(routeMap);
-
-    // Draw same road network on the route map
-    const segments = [
-        { coords: [[44.95, -93.33], [44.97, -93.20]], vol: 5240 },
-        { coords: [[44.91, -93.26], [45.02, -93.26]], vol: 4890 },
-        { coords: [[44.97, -93.38], [44.97, -93.27]], vol: 3120 },
-        { coords: [[44.985, -93.32], [44.985, -93.27]], vol: 1250 },
-        { coords: [[44.89, -93.35], [45.03, -93.35]], vol: 4230 },
-        { coords: [[44.94, -93.30], [44.99, -93.25]], vol: 1950 },
-        { coords: [[44.97, -93.24], [45.01, -93.25]], vol: 1680 },
-        { coords: [[44.96, -93.25], [44.90, -93.21]], vol: 2950 },
-        { coords: [[44.948, -93.31], [44.948, -93.22]], vol: 3410 }
-    ];
-    segments.forEach(s => {
-        const color = s.vol > 4500 ? '#e85656' : s.vol > 2000 ? '#f2a134' : '#8cd6c4';
-        L.polyline(s.coords, { color, weight: 5, opacity: 0.75 }).addTo(routeMap);
-    });
-}
-
-function planRoute() {
-    const origin = document.getElementById('route-origin').value.trim();
-    const dest = document.getElementById('route-dest').value.trim();
-    const time = document.getElementById('route-time').value;
-    const priority = document.getElementById('route-priority').value;
-
-    const placeholder = document.getElementById('route-placeholder');
-    const results = document.getElementById('route-results');
-    const list = document.getElementById('route-options-list');
-
-    if (!origin || !dest) {
-        if (placeholder) placeholder.innerHTML = '<i data-lucide="alert-circle" style="color:#e85656;font-size:1.5rem;"></i><p style="color:#e85656;">Please enter both origin and destination.</p>';
-        lucide.createIcons();
-        return;
-    }
-
-    if (placeholder) placeholder.classList.add('hidden');
-    if (results) results.classList.remove('hidden');
-
-    // Simulated route options based on priority
-    const routes = [
-        { label: 'Via I-35W Central', time: '18 min', dist: '12.4 km', congestion: 'Moderate', incidents: 0, speed: '41 km/h', tag: 'Fastest', tagCls: 'tag-green' },
-        { label: 'Via Hennepin Ave', time: '23 min', dist: '10.8 km', congestion: 'Clear', incidents: 0, speed: '28 km/h', tag: 'Least congested', tagCls: 'tag-blue' },
-        { label: 'Via Lake St Arterial', time: '31 min', dist: '13.1 km', congestion: 'Heavy', incidents: 1, speed: '25 km/h', tag: 'Scenic', tagCls: 'tag-amber' },
-    ];
-
-    // Sort by priority
-    if (priority === 'fastest') routes.sort((a, b) => parseInt(a.time) - parseInt(b.time));
-    else if (priority === 'least_congested') routes.sort((a, b) => a.congestion === 'Clear' ? -1 : 1);
-
-    list.innerHTML = routes.map((r, i) => `
-        <div class="route-option-card ${i === 0 ? 'route-option-recommended' : ''}">
-            <div class="route-option-top">
-                <div>
-                    <span class="route-option-name">${r.label}</span>
-                    ${i === 0 ? `<span class="route-tag ${r.tagCls}">${r.tag}</span>` : ''}
-                </div>
-                <span class="route-option-time">${r.time}</span>
-            </div>
-            <div class="route-option-meta">
-                <span><i data-lucide="milestone"></i> ${r.dist}</span>
-                <span><i data-lucide="gauge"></i> ${r.speed}</span>
-                <span><i data-lucide="alert-triangle" style="color:${r.incidents > 0 ? '#e85656' : '#8cd6c4'}"></i> ${r.incidents} incident${r.incidents !== 1 ? 's' : ''}</span>
-            </div>
-        </div>
-    `).join('');
-
-    // Update stat strip
-    const best = routes[0];
-    const etaEl = document.getElementById('route-eta');
-    const distEl = document.getElementById('route-distance');
-    const incEl = document.getElementById('route-incidents');
-    const speedEl = document.getElementById('route-avg-speed');
-    if (etaEl) etaEl.textContent = best.time;
-    if (distEl) distEl.textContent = best.dist;
-    if (incEl) incEl.textContent = best.incidents + ' found';
-    if (speedEl) speedEl.textContent = best.speed;
-
-    lucide.createIcons();
-    setTimeout(() => { if (routeMap) routeMap.invalidateSize(); }, 100);
-}

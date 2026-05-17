@@ -54,10 +54,7 @@
                     <i data-lucide="brain"></i>
                     <span>Neural Predictor</span>
                 </a>
-                <a href="javascript:void(0)" onclick="showSection('route-planner')" id="nav-route-planner" class="nav-item">
-                    <i data-lucide="route"></i>
-                    <span>Route Planner</span>
-                </a>
+
                 <a href="javascript:void(0)" onclick="showSection('analytics')" id="nav-analytics" class="nav-item">
                     <i data-lucide="bar-chart-3"></i>
                     <span>Analytics</span>
@@ -573,107 +570,7 @@
             </div>
         </section>
 
-        <!-- 4. Route Planner -->
-        <section id="route-planner" class="spa-section">
-            <div class="section-header-centered">
-                <h2>Route Planner</h2>
-                <p>Analyse routes based on real-time and predicted traffic conditions</p>
-            </div>
-
-            <div class="route-planner-grid">
-                <!-- Input Panel -->
-                <div class="glass-card route-input-card">
-                    <h3>Plan your route</h3>
-                    <div class="route-form">
-                        <div class="route-input-group">
-                            <label><i data-lucide="map-pin"></i> Origin</label>
-                            <input type="text" id="route-origin" placeholder="Enter starting point" class="route-text-input">
-                        </div>
-                        <div class="route-connector-dot"></div>
-                        <div class="route-input-group">
-                            <label><i data-lucide="flag"></i> Destination</label>
-                            <input type="text" id="route-dest" placeholder="Enter destination" class="route-text-input">
-                        </div>
-                        <div class="route-options-row">
-                            <div class="route-option-item">
-                                <label>Departure time</label>
-                                <input type="time" id="route-time" value="08:00" class="route-time-input">
-                            </div>
-                            <div class="route-option-item">
-                                <label>Priority</label>
-                                <select id="route-priority" class="route-select">
-                                    <option value="fastest">Fastest route</option>
-                                    <option value="least_congested">Least congested</option>
-                                    <option value="scenic">Scenic / arterials</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button class="execute-btn" onclick="planRoute()">
-                            <i data-lucide="route"></i> Plan route
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Results Panel -->
-                <div class="glass-card route-results-card" id="route-results-card">
-                    <div class="route-placeholder" id="route-placeholder">
-                        <i data-lucide="map" style="font-size: 2rem; color: var(--primary); opacity: 0.5;"></i>
-                        <p>Enter origin and destination to see route options</p>
-                    </div>
-                    <div id="route-results" class="hidden">
-                        <h3>Route options <span class="route-result-badge" id="route-count">3 found</span></h3>
-                        <div class="route-options-list" id="route-options-list"></div>
-                    </div>
-                </div>
-
-                <!-- Map Panel -->
-                <div class="route-map-panel glass-card">
-                    <div class="route-map-header">
-                        <h3>Live traffic map</h3>
-                        <div class="route-map-legend">
-                            <span><span class="route-dot green"></span> Clear</span>
-                            <span><span class="route-dot amber"></span> Moderate</span>
-                            <span><span class="route-dot red"></span> Heavy</span>
-                        </div>
-                    </div>
-                    <div id="route-map-container" class="route-map-view"></div>
-                </div>
-
-                <!-- Stats Row -->
-                <div class="route-stats-strip">
-                    <div class="route-stat-item">
-                        <i data-lucide="clock" class="route-stat-icon"></i>
-                        <div>
-                            <span class="route-stat-val" id="route-eta">--</span>
-                            <span class="route-stat-label">Est. travel time</span>
-                        </div>
-                    </div>
-                    <div class="route-stat-item">
-                        <i data-lucide="milestone" class="route-stat-icon"></i>
-                        <div>
-                            <span class="route-stat-val" id="route-distance">--</span>
-                            <span class="route-stat-label">Distance</span>
-                        </div>
-                    </div>
-                    <div class="route-stat-item">
-                        <i data-lucide="alert-triangle" class="route-stat-icon"></i>
-                        <div>
-                            <span class="route-stat-val" id="route-incidents">--</span>
-                            <span class="route-stat-label">Incidents</span>
-                        </div>
-                    </div>
-                    <div class="route-stat-item">
-                        <i data-lucide="gauge" class="route-stat-icon"></i>
-                        <div>
-                            <span class="route-stat-val" id="route-avg-speed">--</span>
-                            <span class="route-stat-label">Avg speed</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. Deep Analytics -->
+        <!-- 4. Deep Analytics -->
         <section id="analytics" class="spa-section">
             <!-- Global Actions Bar -->
             <div class="analytics-actions-bar">
